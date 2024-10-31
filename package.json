@@ -1,0 +1,22 @@
+{
+  "name": "conest",
+  "version": "1.0.0",
+  "description": "Sistema para gestão de estoque no comércio de bens e serviços.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewdantas/conestv3.git"
+  },
+  "author": "Andrew Dantas",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewdantas/conestv3/issues"
+  },
+  "homepage": "https://github.com/andrewdantas/conestv3#readme",
+  "dependencies": {
+    "electron": "^33.0.2"
+  }
+}
