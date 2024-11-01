@@ -1,0 +1,8 @@
+/* botões */
+
+.button img {
+    margin: 50px 15px 25px 15px;
+    padding: 5px;
+    border: 1px solid #E8E8E8;
+    cursor: pointer;
+}

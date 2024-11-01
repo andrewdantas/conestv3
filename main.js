@@ -22,6 +22,18 @@ function createWindow() {
     ipcMain.on('open-client', () => {
         clientWindow()
     })
+
+    ipcMain.on('open-supplier', () => {
+        supplierWindow()
+    })
+
+    ipcMain.on('open-products', () => {
+        productsWindow()
+    })
+
+    ipcMain.on('open-reports', () => {
+        reportsWindow()
+    })
 }
 
 // Janela Sobre
@@ -78,6 +90,81 @@ function clientWindow () {
     }
     
     client.loadFile('./src/views/clientes.html')
+
+}
+
+// Janela Fornecedores
+function supplierWindow () {
+    nativeTheme.themeSource = "light"
+    const main = BrowserWindow.getFocusedWindow()
+    let supplier
+    if (main) {
+        supplier = new BrowserWindow ({
+            width: 800,
+            height: 600,
+            autoHideMenuBar: true,
+            resizable: true,
+            minimizable: true,
+            //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
+            parent: main,
+            modal: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+         })
+    }
+    
+    supplier.loadFile('./src/views/fornecedores.html')
+
+}
+
+// Janela Produtos
+function productsWindow () {
+    nativeTheme.themeSource = "light"
+    const main = BrowserWindow.getFocusedWindow()
+    let products
+    if (main) {
+        products = new BrowserWindow ({
+            width: 800,
+            height: 600,
+            autoHideMenuBar: true,
+            resizable: true,
+            minimizable: true,
+            //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
+            parent: main,
+            modal: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+         })
+    }
+    
+    products.loadFile('./src/views/produtos.html')
+
+}
+
+// Janela Relatórios
+function reportsWindow () {
+    nativeTheme.themeSource = "light"
+    const main = BrowserWindow.getFocusedWindow()
+    let reports
+    if (main) {
+        reports = new BrowserWindow ({
+            width: 800,
+            height: 600,
+            autoHideMenuBar: true,
+            resizable: true,
+            minimizable: true,
+            //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
+            parent: main,
+            modal: true,
+            webPreferences: {
+                preload: path.join(__dirname, 'preload.js')
+            }
+         })
+    }
+    
+    reports.loadFile('./src/views/relatorios.html')
 
 }
 
