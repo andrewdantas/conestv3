@@ -1,6 +1,13 @@
 const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain} = require('electron/main')
 const path = require('node:path')
 
+// Importação módulo de conexão 
+const { dbConnect, desconectar } = require('./database.js')
+// status de conexão com o banco. No MongoDB é mais eficiente mantrer uma única conexão aberta durante todo o tempo de vida do aplicativo e usá-lo quando necessário. Fechar e reabrir constantemente a conexão aumenta a sobrecarga e reduz o desempenho do servidor.
+// a variável abaixo é usada para garantir que o banco de dados inicie desconectado (evitar abrir outra instância).
+let dbcon = null
+
+
 // Janela Principal
 let win
 function createWindow() {
@@ -171,6 +178,13 @@ function reportsWindow () {
 // Execução assíncrona do aplicativo electron
 app.whenReady().then(() => {
     createWindow()
+
+    // Melhor local para estabelecer a conexão com o banco de dados
+    // Importar antes o módulo de conexã no início do código
+    ipcMain.on('db-connect', async(event, message) => {
+        // a linha abaixo estabelece a conexão com o banco
+        dbcon = await dbConnect()
+    })
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {

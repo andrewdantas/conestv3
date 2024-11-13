@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/andrewdantas/conestv3#readme",
   "dependencies": {
-    "electron": "^33.0.2"
+    "electron": "^33.0.2",
+    "mongoose": "^8.8.1"
   }
 }

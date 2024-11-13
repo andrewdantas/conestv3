@@ -12,9 +12,50 @@
 
 <body>
     <div class="container">
-       <h1>Clientes</h1>
-    </div>
+        <h1>Clientes</h1>
+        <form id="frmClient" class="mt-2 row g-3">
+            <!-- Buscar Cliente -->
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="inputSearch" maxlength="30" spellcheck="false">
+            </div>
+            <div class="col-md-4">
+        <button class="btn btn-primary" id="btnRead">Buscar</button>
+            </div>
+            <hr class="mt-4 border border-primary border -1">
 
+            <!-- ID do cliente -->
+            <div class="col-md-6" id="idClient">
+                <input class="form-control" type="text" id="inputClient" placeholder="id">
+            </div>
+
+            <!-- Nome do cliente -->
+            <div class="col-md-8">
+                <label for="inputNameClient" class="form-label">Nome</label>
+                <input class="form-control" type="text" id="inputNameClient" spellcheck="false" maxlength="50" required>
+            </div>
+
+            <!-- Telefone do cliente -->
+            <div class="col-md-4">
+                <label for="inputPhoneClient" class="form-label">Telefone</label>
+                <input class="form-control" type="tel" id="inputPhoneClient" spellcheck="false" maxlength="15" required>
+            </div>
+
+            <!-- E-mail do cliente -->
+            <div class="col-md-8">
+                <label for="inputEmailClient" class="form-label">E-mail</label>
+                <input class="form-control" type="email" id="inputEmailClient" spellcheck="false" maxlength="50">
+            </div>
+
+            <!-- Botões -->
+            <div class="mt-5">
+                <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
+                <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
+                <button type="submit" class="btn btn-danger" id="btnDelete">Excluir</button>
+                <button type="reset" class="btn" id="btnReset"></button>
+            </div>
+
+        </form>
+    </div>
     <script src="../public/js/bootstrap.min.js"></script>
     <script src="clientes.js"></script>
 </body>
