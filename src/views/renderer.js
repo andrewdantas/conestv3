@@ -37,3 +37,13 @@ function obterData() {
     }
     return data.toLocaleDateString('pt-br', options)
 }
+
+// Ícone de status do banco de dados
+api.dbMensagem((event, message) => {
+    // validação e troca do ícone
+    if (message === "conectado") {
+        document.getElementById('iconDB').src = "../public/img/dbon.png"
+    } else {
+        document.getElementById('iconDB').src = "../public/img/dboff.png"
+    }
+})
