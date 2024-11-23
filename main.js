@@ -1,4 +1,4 @@
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain} = require('electron/main')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog} = require('electron/main')
 const path = require('node:path')
 
 // Importação módulo de conexão 
@@ -7,6 +7,8 @@ const { dbConnect, desconectar } = require('./database.js')
 // a variável abaixo é usada para garantir que o banco de dados inicie desconectado (evitar abrir outra instância).
 let dbcon = null
 
+// importação do Schema Clientes da camada model
+const clienteModel = require('./src/models/Clientes.js')
 
 // Janela Principal
 let win
@@ -20,8 +22,8 @@ function createWindow() {
         }
     })
 
-    // Menu personalizado
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+    // Menu personalizado (comentar para debugar)
+   // Menu.setApplicationMenu(Menu.buildFromTemplate(template))
     
     win.loadFile('./src/views/index.html')
 
@@ -84,7 +86,7 @@ function clientWindow () {
         client = new BrowserWindow ({
             width: 800,
             height: 600,
-            autoHideMenuBar: true,
+            //autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
             //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
@@ -280,3 +282,34 @@ const template = [
     }
 ]
 
+// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Recebimento dos dados do formulário
+ipcMain.on('new-client', async (event, cliente) => {
+    // Teste de recebimento dos dados (Passo 2 - slide) Importante!
+    console.log(cliente)
+
+    // Passo 3 - slide (cadastrar os dados do banco de dados)
+    try {
+        // Criar um novo objeto usando a classe modelo
+        const novoCliente = new clienteModel({
+            nomeCliente: cliente.nomeCli,
+            foneCliente: cliente.foneCli,
+            emailCliente: cliente.emailCli
+        })
+        // A linha abaixo usa a biblioteca moongoose para salvar
+        await novoCliente.save()
+
+        // Confirmação  de cliente  adicionado no banco
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Aviso',
+            message: "Cliente adicionado com sucesso",
+            buttons: ['OK']
+        })
+        // Enviar uma resposta para o renderizador resetar o formulário
+        event.reply('reset-form')
+
+    } catch (error) {
+        console.log(error)
+    }
+})
