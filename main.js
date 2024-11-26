@@ -10,6 +10,13 @@ let dbcon = null
 // importação do Schema Clientes da camada model
 const clienteModel = require('./src/models/Clientes.js')
 
+// importação do Schema Fornecedores da camada model
+const fornecedorModel = require('./src/models/Fornecedores.js')
+
+// importação do Schema Produtos da camada model
+const produtoModel = require('./src/models/Produtos.js')
+
+
 // Janela Principal
 let win
 function createWindow() {
@@ -282,8 +289,12 @@ const template = [
     }
 ]
 
+/****************************************/
+/*************** Clientes **************/
+/**************************************/
+
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Recebimento dos dados do formulário
+// Recebimento dos dados do formulário do cliente
 ipcMain.on('new-client', async (event, cliente) => {
     // Teste de recebimento dos dados (Passo 2 - slide) Importante!
     console.log(cliente)
@@ -303,7 +314,7 @@ ipcMain.on('new-client', async (event, cliente) => {
         dialog.showMessageBox({
             type: 'info',
             title: 'Aviso',
-            message: "Cliente adicionado com sucesso",
+            message: "Cliente Adicionado com Sucesso",
             buttons: ['OK']
         })
         // Enviar uma resposta para o renderizador resetar o formulário
@@ -313,3 +324,78 @@ ipcMain.on('new-client', async (event, cliente) => {
         console.log(error)
     }
 })
+// Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+/********************************************/
+/*************** Fornecedores **************/
+/******************************************/
+
+// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Recebimento dos dados do formulário do fornecedor
+ipcMain.on('new-supplier', async (event, fornecedor) => {
+    // Teste de recebimento dos dados (Passo 2 - slide) Importante!
+    console.log(fornecedor)
+
+    // Passo 3 - slide (cadastrar os dados do banco de dados)
+    try {
+        // Criar um novo objeto usando a classe modelo
+        const novoFornecedor = new fornecedorModel({
+            nomeFornecedor: fornecedor.nomeFor,
+            foneFornecedor: fornecedor.foneFor,
+            siteFornecedor: fornecedor.siteFor
+        })
+        // A linha abaixo usa a biblioteca moongoose para salvar
+        await novoFornecedor.save()
+
+        // Confirmação  de cliente  adicionado no banco
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Aviso',
+            message: "Fornecedor Adicionado com Sucesso",
+            buttons: ['OK']
+        })
+        // Enviar uma resposta para o renderizador resetar o formulário
+        event.reply('reset-form')
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+/********************************************/
+/*************** Produtos ******************/
+/******************************************/
+
+// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Recebimento dos dados do formulário do produto
+ipcMain.on('new-product', async (event, produto) => {
+    // Teste de recebimento dos dados (Passo 2 - slide) Importante!
+    console.log(produto)
+
+    // Passo 3 - slide (cadastrar os dados do banco de dados)
+    try {
+        // Criar um novo objeto usando a classe modelo
+        const novoProduto = new produtoModel({
+            nomeProduto: produto.nomePro,
+            barcodeProduto: produto.barcodePro,
+            precoProduto: produto.precoPro
+        })
+        // A linha abaixo usa a biblioteca moongoose para salvar
+        await novoProduto.save()
+
+        // Confirmação  de cliente  adicionado no banco
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Aviso',
+            message: "Produto Adicionado com Sucesso",
+            buttons: ['OK']
+        })
+        // Enviar uma resposta para o renderizador resetar o formulário
+        event.reply('reset-form')
+
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

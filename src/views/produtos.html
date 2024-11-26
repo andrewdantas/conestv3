@@ -12,9 +12,50 @@
 
 <body>
     <div class="container">
-       <h1>Produtos</h1>
-    </div>
+        <h1>Produtos</h1>
+        <form id="frmProduct" class="mt-2 row g-3">
+            <!-- Buscar Produto -->
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="searchProduct" maxlength="30" spellcheck="false">
+            </div>
+            <div class="col-md-4">
+        <button class="btn btn-primary" id="btnRead">Buscar</button>
+            </div>
+            <hr class="mt-4 border border-primary border -1">
 
+            <!-- ID do Produto -->
+            <div class="col-md-6" id="idSupplier">
+                <input class="form-control" type="text" id="inputProduct" placeholder="id">
+            </div>
+
+            <!-- Nome do Produto -->
+            <div class="col-md-8">
+                <label for="inputNameProduct" class="form-label">Produto</label>
+                <input class="form-control" type="text" id="inputNameProduct" spellcheck="false" maxlength="50" required>
+            </div>
+
+            <!-- Barcode do Produto -->
+            <div class="col-md-4">
+                <label for="inputBarcodeProduct" class="form-label">Barcode</label>
+                <input class="form-control" type="number" id="inputBarcodeProduct" spellcheck="false" maxlength="15" required>
+            </div>
+
+            <!-- Preço do Produto -->
+            <div class="col-md-8">
+                <label for="inputPriceProduct" class="form-label">Preço</label>
+                <input class="form-control" type="number" id="inputPriceProduct" spellcheck="false" maxlength="50">
+            </div>
+
+            <!-- Botões -->
+            <div class="mt-5">
+                <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
+                <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
+                <button type="submit" class="btn btn-danger" id="btnDelete">Excluir</button>
+                <button type="reset" class="btn" id="btnReset"></button>
+            </div>
+
+        </form>
+    </div>
     <script src="../public/js/bootstrap.min.js"></script>
     <script src="produtos.js"></script>
 </body>

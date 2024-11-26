@@ -6,7 +6,7 @@
 const mongoose = require('mongoose')
 
 // Definir a URl e autenticação do banco de dados (acrescentar ao final da URL um nome para o banco de dados)
-const url = 'mongodb+srv://admin:123senac@clusterconest.axcbi.mongodb.net/dbconest'
+const url = 'mongodb+srv://admin:123senac@clusterconest.axcbi.mongodb.net/mybankdbconest'
 
 // status de conexão ("ícone de conexão")
 let isConnected = false
