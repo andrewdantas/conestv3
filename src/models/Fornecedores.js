@@ -16,6 +16,21 @@ const fornecedoresSchema = new Schema ({
     siteFornecedor: {
         type: String
     },
+    cepFornecedor: {
+        type: String
+    },
+    logradouroFornecedor: {
+        type: String
+    },
+    bairroFornecedor: {
+        type: String
+    },
+    cidadeFornecedor: {
+        type: String
+    },
+    ufFornecedor: {
+        type: String
+    }
 })
 
 // exportar para o arquivo main.js

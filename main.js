@@ -305,7 +305,12 @@ ipcMain.on('new-client', async (event, cliente) => {
         const novoCliente = new clienteModel({
             nomeCliente: cliente.nomeCli,
             foneCliente: cliente.foneCli,
-            emailCliente: cliente.emailCli
+            emailCliente: cliente.emailCli,
+            cepCliente: cliente.cepCli,
+            logradouroCliente: cliente.logradouroCli,
+            bairroCliente: cliente.bairroCli,
+            cidadeCliente: cliente.cidadeCli,
+            ufCliente: cliente.ufCli
         })
         // A linha abaixo usa a biblioteca moongoose para salvar
         await novoCliente.save()
@@ -342,7 +347,13 @@ ipcMain.on('new-supplier', async (event, fornecedor) => {
         const novoFornecedor = new fornecedorModel({
             nomeFornecedor: fornecedor.nomeFor,
             foneFornecedor: fornecedor.foneFor,
-            siteFornecedor: fornecedor.siteFor
+            siteFornecedor: fornecedor.siteFor,
+            cepFornecedor: cliente.cepFor,
+            logradouroFornecedor: cliente.logradouroFor,
+            bairroFornecedor: cliente.bairroFor,
+            cidadeFornecedor: cliente.cidadeFor,
+            ufFornecedor: cliente.ufFor
+
         })
         // A linha abaixo usa a biblioteca moongoose para salvar
         await novoFornecedor.save()

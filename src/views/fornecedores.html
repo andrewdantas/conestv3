@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self' https://viacep.com.br;">
     <title>Conest - Fornecedores</title>
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
     <link rel="stylesheet" href="../public/css/style.css">
@@ -19,7 +20,7 @@
                 <input type="text" class="form-control" id="searchSupplier" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-4">
-        <button class="btn btn-primary" id="btnRead">Buscar</button>
+                <button class="btn btn-primary" id="btnRead">Buscar</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
 
@@ -31,19 +32,79 @@
             <!-- Nome do Fornecedor -->
             <div class="col-md-8">
                 <label for="inputNameSupplier" class="form-label">Razão Social</label>
-                <input class="form-control" type="text" id="inputNameSupplier" spellcheck="false" maxlength="50" required>
+                <input class="form-control" type="text" id="inputNameSupplier" spellcheck="false" maxlength="50"
+                    required>
             </div>
 
             <!-- Telefone do Fornecedor -->
             <div class="col-md-4">
                 <label for="inputPhoneSupplier" class="form-label">Telefone</label>
-                <input class="form-control" type="tel" id="inputPhoneSupplier" spellcheck="false" maxlength="15" required>
+                <input class="form-control" type="tel" id="inputPhoneSupplier" maxlength="15" required>
             </div>
 
             <!-- Site do Fornecedor -->
             <div class="col-md-8">
                 <label for="inputSiteSupplier" class="form-label">Site</label>
                 <input class="form-control" type="text" id="inputSiteSupplier" spellcheck="false" maxlength="50">
+            </div>
+
+            <!-- Novo campo: CEP -->
+            <div class="col-md-4">
+                <label for="inputCepSupplier" class="form-label">CEP</label>
+                <input class="form-control" type="text" id="inputCepSupplier" maxlength="9" required>
+            </div>
+
+            <!-- Novo campo: Logradouro -->
+            <div class="col-md-8">
+                <label for="inputLogradouroSupplier" class="form-label">Logradouro</label>
+                <input class="form-control" type="text" id="inputLogradouroSupplier" required>
+            </div>
+
+            <!-- Novo campo: Bairro -->
+            <div class="col-md-8">
+                <label for="inputBairroSupplier" class="form-label">Bairro</label>
+                <input class="form-control" type="text" id="inputBairroSupplier" required>
+            </div>
+
+            <!-- Novo campo: Cidade -->
+            <div class="col-md-6">
+                <label for="inputCidadeSupplier" class="form-label">Cidade</label>
+                <input class="form-control" type="text" id="inputCidadeSupplier" required>
+            </div>
+
+            <!-- Novo campo: UF -->
+            <div class="col-md-4">
+                <label for="inputUfSupplier" class="form-label">UF</label>
+                <select class="form-control" id="inputUfSupplier" required>
+                    <option value="">Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                </select>
             </div>
 
             <!-- Botões -->
