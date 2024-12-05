@@ -3,6 +3,9 @@
  * fornecedores.html
  */
 
+// Array usado nos métodos para manipulação da estrutura de dados 
+let arrayFornecedor = []
+
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // Passo 1 - slide (capturar os dados dos inputs do form)
@@ -38,6 +41,35 @@ formFornecedor.addEventListener('submit', async (event) => {
     api.novoFornecedor(fornecedor)
 })
 // Fim do CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function buscarFornecedor() {
+    // Passo 1 (slide)
+    let forNome = document.getElementById('searchSupplier').value
+    console.log(forNome)
+    // Passo 2 (slide) - Enviar o pedido de busca do fornecedor ao main
+    api.buscarFornecedor(forNome)
+    // Passo 5 - Recebimento dos dados do fornecedor
+    api.renderizarFornecedor((event, dadosFornecedor) => {
+        // teste de recebimento dos dados do fornecedor
+        console.log(dadosFornecedor)
+        // Passo 6 (slide) - Renderização dos dados dos fornecedor no formulário
+        const fornecedorRenderizado = JSON.parse(dadosFornecedor)
+        arrayFornecedor = fornecedorRenderizado
+        // teste para entendimento da lógica
+        console.log(arrayFornecedor)
+        // percorrer o array de fornecedor, extrair os dados e setar (preencher) os campos do formulário
+        arrayFornecedor.forEach((c) => {
+            document.getElementById('inputNameSupplier').value = c.nomeFornecedor
+            document.getElementById('inputPhoneSupplier').value = c.foneFornecedor
+            document.getElementById('inputSiteSupplier').value = c.siteFornecedor
+            document.getElementById('inputSupplier').value = c._id
+        })
+    })
+}
+// Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
 
 // Função para preencher os dados de endereço automaticamente
 cepFornecedor.addEventListener('blur', async () => {

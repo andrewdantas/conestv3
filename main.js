@@ -331,6 +331,30 @@ ipcMain.on('new-client', async (event, cliente) => {
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+// CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('search-client', async (event, cliNome) => {
+    // teste de recebimento do nome do cliente a ser pesquisado (passo 2)
+    console.log(cliNome)
+    // Passo 3 e 4 - Pesquisar no banco de dados o client pelo nome
+    // find() -> buscar no banco de dados (mongoose)
+    // RegExp -> filtro pelo nome do cliente, 'i' insensitive ( maiúsculo ou minúsculo)
+    // ATENÇÃO: nomeCliente -> model | cliNome -> renderizador
+    try {
+        const dadosCliente = await clienteModel.find ({
+            nomeCliente: new RegExp(cliNome, 'i')
+        })
+        console.log(dadosCliente) // teste do passo 3 e 4
+        // Passo 5 - slide -> enviar os dados do cliente para o renderizador (JSON.stringify converte para JSON)
+        event.reply('data-client', JSON.stringify(dadosCliente))
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 /********************************************/
 /*************** Fornecedores **************/
 /******************************************/
@@ -374,6 +398,30 @@ ipcMain.on('new-supplier', async (event, fornecedor) => {
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+// CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('search-supplier', async (event, forNome) => {
+    // teste de recebimento do nome do fornecedor a ser pesquisado (passo 2)
+    console.log(forNome)
+    // Passo 3 e 4 - Pesquisar no banco de dados o fornecedor pelo nome
+    // find() -> buscar no banco de dados (mongoose)
+    // RegExp -> filtro pelo nome do fornecedor, 'i' insensitive ( maiúsculo ou minúsculo)
+    // ATENÇÃO: nomeFornecedor -> model | forNome -> renderizador
+    try {
+        const dadosFornecedor = await fornecedorModel.find ({
+            nomeFornecedor: new RegExp(forNome, 'i')
+        })
+        console.log(dadosFornecedor) // teste do passo 3 e 4
+        // Passo 5 - slide -> enviar os dados do fornecedor para o renderizador (JSON.stringify converte para JSON)
+        event.reply('data-supplier', JSON.stringify(dadosFornecedor))
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 /********************************************/
 /*************** Produtos ******************/
 /******************************************/
@@ -410,3 +458,25 @@ ipcMain.on('new-product', async (event, produto) => {
     }
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+// CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('search-product', async (event, proNome) => {
+    // teste de recebimento do nome do produto a ser pesquisado (passo 2)
+    console.log(proNome)
+    // Passo 3 e 4 - Pesquisar no banco de dados o produto pelo nome
+    // find() -> buscar no banco de dados (mongoose)
+    // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
+    // ATENÇÃO: nomeProduto -> model | proNome -> renderizador
+    try {
+        const dadosProduto = await produtoModel.find ({
+            nomeProduto: new RegExp(proNome, 'i')
+        })
+        console.log(dadosProduto) // teste do passo 3 e 4
+        // Passo 5 - slide -> enviar os dados do produto para o renderizador (JSON.stringify converte para JSON)
+        event.reply('data-product', JSON.stringify(dadosProduto))
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

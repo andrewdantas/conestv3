@@ -3,6 +3,9 @@
  * clientes.html
  */
 
+// Array usado nos métodos para manipulação da estrutura de dados 
+let arrayCliente = []
+
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 // Passo 1 - slide (capturar os dados dos inputs do form)
@@ -41,6 +44,35 @@ formCliente.addEventListener('submit', async (event) => {
 // Fim do CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
+// CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function buscarCliente() {
+    // Passo 1 (slide)
+    let cliNome = document.getElementById('searchClient').value
+    console.log(cliNome)
+    // Passo 2 (slide) - Enviar o pedido de busca do cliente ao main
+    api.buscarCliente(cliNome)
+    // Passo 5 - Recebimento dos dados do cliente
+    api.renderizarCliente((event, dadosCliente) => {
+        // teste de recebimento dos dados do cliente
+        console.log(dadosCliente)
+        // Passo 6 (slide) - Renderização dos dados dos cliente no formulário
+        const clienteRenderizado = JSON.parse(dadosCliente)
+        arrayCliente = clienteRenderizado
+        // teste para entendimento da lógica
+        console.log(arrayCliente)
+        // percorrer o array de clientes, extrair os dados e setar (preencher) os campos do formulário
+        arrayCliente.forEach((c) => {
+            document.getElementById('inputNameClient').value = c.nomeCliente
+            document.getElementById('inputPhoneClient').value = c.foneCliente
+            document.getElementById('inputEmailClient').value = c.emailCliente
+            document.getElementById('inputClient').value = c._id
+        })
+    })
+}
+// Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+
 // Função para preencher os dados de endereço automaticamente
 cepCliente.addEventListener('blur', async () => {
     let cep = cepCliente.value.replace(/\D/g, '') // Remove caracteres não numéricos
@@ -51,7 +83,7 @@ cepCliente.addEventListener('blur', async () => {
             const data = await response.json()
 
             if (data.erro) {
-               // alert("CEP não encontrado!")
+                console.log("CEP não encontrado!")
             } else {
                 logradouroCliente.value = data.logradouro
                 bairroCliente.value = data.bairro
@@ -60,7 +92,6 @@ cepCliente.addEventListener('blur', async () => {
             }
         } catch (error) {
             console.log("Erro ao buscar CEP:", error)
-           // alert("Erro ao buscar o CEP.")
         }
     }
 })
@@ -126,7 +157,7 @@ cepCliente.addEventListener('blur', async () => {
             const data = await response.json()
 
             if (data.erro) {
-               // alert("CEP não encontrado!")
+                console.log("CEP não encontrado!")
             } else {
                 logradouroCliente.value = data.logradouro
                 bairroCliente.value = data.bairro
@@ -139,7 +170,6 @@ cepCliente.addEventListener('blur', async () => {
             }
         } catch (error) {
             console.log("Erro ao buscar CEP:", error)
-            // alert("Erro ao buscar o CEP.")
         }
     }
 })
@@ -156,6 +186,4 @@ api.resetarFormulario((args) => {
     document.getElementById('inputCidadeClient').value = ""
     document.getElementById('inputUfClient').value = ""
 })
-
-
 // Fim - Reset Form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
