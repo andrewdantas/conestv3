@@ -23,5 +23,7 @@ contextBridge.exposeInMainWorld('api', {
     buscarFornecedor: (forNome) => ipcRenderer.send('search-supplier', forNome),
     renderizarFornecedor: (dadosFornecedor) => ipcRenderer.on('data-supplier', dadosFornecedor),
     buscarProduto: (proNome) => ipcRenderer.send('search-product', proNome),
-    renderizarProduto: (dadosProduto) => ipcRenderer.on('data-product', dadosProduto)
+    renderizarProduto: (dadosProduto) => ipcRenderer.on('data-product', dadosProduto),
+    buscarProdutoPorBarcode: (barCode) => ipcRenderer.send('search-barcode', barCode),
+    renderizarBarcode: (dadosBarcode) => ipcRenderer.on('data-barcode', dadosBarcode)
 })

@@ -22,6 +22,9 @@ const clienteSchema = new Schema ({
     logradouroCliente: {
         type: String
     },
+    numeroCliente: {
+        type: String
+    },
     bairroCliente: {
         type: String
     },

@@ -19,7 +19,14 @@
                 <input type="text" class="form-control" id="searchProduct" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-4">
-        <button class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
+                <button class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
+            </div>
+            <!-- Buscar Produto Por Barcode -->
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="searchBarcode" maxlength="30" spellcheck="false">
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar por Código de Barras</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
 
@@ -31,13 +38,15 @@
             <!-- Nome do Produto -->
             <div class="col-md-8">
                 <label for="inputNameProduct" class="form-label">Produto</label>
-                <input class="form-control" type="text" id="inputNameProduct" spellcheck="false" maxlength="50" required>
+                <input class="form-control" type="text" id="inputNameProduct" spellcheck="false" maxlength="50"
+                    required>
             </div>
 
             <!-- Barcode do Produto -->
             <div class="col-md-4">
                 <label for="inputBarcodeProduct" class="form-label">Barcode</label>
-                <input class="form-control" type="number" id="inputBarcodeProduct" spellcheck="false" maxlength="15" required>
+                <input class="form-control" type="number" id="inputBarcodeProduct" spellcheck="false" maxlength="15"
+                    required>
             </div>
 
             <!-- Preço do Produto -->

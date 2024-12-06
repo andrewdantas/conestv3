@@ -1,6 +1,6 @@
 /**
  * Processo de renderização
- * clientes.html
+ * clientes.js
  */
 
 // Array usado nos métodos para manipulação da estrutura de dados 
@@ -15,6 +15,7 @@ let foneCliente = document.getElementById('inputPhoneClient')
 let emailCliente = document.getElementById('inputEmailClient')
 let cepCliente = document.getElementById('inputCepClient')
 let logradouroCliente = document.getElementById('inputLogradouroClient')
+let numeroCliente = document.getElementById('inputNumeroClient')
 let bairroCliente = document.getElementById('inputBairroClient')
 let cidadeCliente = document.getElementById('inputCidadeClient')
 let ufCliente = document.getElementById('inputUfClient')
@@ -35,6 +36,7 @@ formCliente.addEventListener('submit', async (event) => {
         emailCli: emailCliente.value,
         cepCli: cepCliente.value,
         logradouroCli: logradouroCliente.value,
+        numeroCli: numeroCliente.value,
         bairroCli: bairroCliente.value,
         cidadeCli: cidadeCliente.value,
         ufCli: ufCliente.value
@@ -65,6 +67,12 @@ function buscarCliente() {
             document.getElementById('inputNameClient').value = c.nomeCliente
             document.getElementById('inputPhoneClient').value = c.foneCliente
             document.getElementById('inputEmailClient').value = c.emailCliente
+            document.getElementById('inputCepClient').value = c.cepCliente
+            document.getElementById('inputLogradouroClient').value = c.logradouroCliente
+            document.getElementById('inputNumeroClient').value = c.numeroCliente
+            document.getElementById('inputBairroClient').value = c.bairroCliente
+            document.getElementById('inputCidadeClient').value = c.cidadeCliente
+            document.getElementById('inputUfClient').value = c.ufCliente
             document.getElementById('inputClient').value = c._id
         })
     })
@@ -182,6 +190,7 @@ api.resetarFormulario((args) => {
     document.getElementById('inputEmailClient').value = ""
     document.getElementById('inputCepClient').value = ""
     document.getElementById('inputLogradouroClient').value = ""
+    document.getElementById('inputNumeroClient').value = ""
     document.getElementById('inputBairroClient').value = ""
     document.getElementById('inputCidadeClient').value = ""
     document.getElementById('inputUfClient').value = ""

@@ -15,7 +15,7 @@ const produtosSchema = new Schema ({
     },
     precoProduto: {
         type: String
-    },
+    }
 })
 
 // exportar para o arquivo main.js

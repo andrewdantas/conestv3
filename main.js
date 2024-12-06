@@ -22,8 +22,9 @@ let win
 function createWindow() {
     nativeTheme.themeSource = 'light'
     win = new BrowserWindow({
-        width: 1010,
+        width: 1280,
         height: 720,
+        resizable: false,  // Impede o redimensionamento manual
         webPreferences: {
             preload: path.join(__dirname, 'preload.js')
         }
@@ -59,8 +60,8 @@ function aboutWindow () {
     let about
     if (main) {
         about = new BrowserWindow ({
-            width: 320,
-            height: 160,
+            width: 1280,
+            height: 720,
             autoHideMenuBar: true,
             resizable: false,
             minimizable: false,
@@ -91,8 +92,8 @@ function clientWindow () {
     let client
     if (main) {
         client = new BrowserWindow ({
-            width: 800,
-            height: 600,
+            width: 1280,
+            height: 720,
             //autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
@@ -116,8 +117,8 @@ function supplierWindow () {
     let supplier
     if (main) {
         supplier = new BrowserWindow ({
-            width: 800,
-            height: 600,
+            width: 1280,
+            height: 720,
             autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
@@ -141,8 +142,8 @@ function productsWindow () {
     let products
     if (main) {
         products = new BrowserWindow ({
-            width: 800,
-            height: 600,
+            width: 1280,
+            height: 720,
             autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
@@ -166,8 +167,8 @@ function reportsWindow () {
     let reports
     if (main) {
         reports = new BrowserWindow ({
-            width: 800,
-            height: 600,
+            width: 1280,
+            height: 720,
             autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
@@ -308,6 +309,7 @@ ipcMain.on('new-client', async (event, cliente) => {
             emailCliente: cliente.emailCli,
             cepCliente: cliente.cepCli,
             logradouroCliente: cliente.logradouroCli,
+            numeroCliente: cliente.numeroCli,
             bairroCliente: cliente.bairroCli,
             cidadeCliente: cliente.cidadeCli,
             ufCliente: cliente.ufCli
@@ -372,11 +374,12 @@ ipcMain.on('new-supplier', async (event, fornecedor) => {
             nomeFornecedor: fornecedor.nomeFor,
             foneFornecedor: fornecedor.foneFor,
             siteFornecedor: fornecedor.siteFor,
-            cepFornecedor: cliente.cepFor,
-            logradouroFornecedor: cliente.logradouroFor,
-            bairroFornecedor: cliente.bairroFor,
-            cidadeFornecedor: cliente.cidadeFor,
-            ufFornecedor: cliente.ufFor
+            cepFornecedor: fornecedor.cepFor,
+            logradouroFornecedor: fornecedor.logradouroFor,
+            numeroFornecedor: fornecedor.numeroFor,
+            bairroFornecedor: fornecedor.bairroFor,
+            cidadeFornecedor: fornecedor.cidadeFor,
+            ufFornecedor: fornecedor.ufFor
 
         })
         // A linha abaixo usa a biblioteca moongoose para salvar
@@ -480,3 +483,24 @@ ipcMain.on('search-product', async (event, proNome) => {
     }
 })
 // Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Read Barcode >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('search-barcode', async (event, barCode) => {
+    // teste de recebimento do nome do produto a ser pesquisado (passo 2)
+    console.log(barCode)
+    // Passo 3 e 4 - Pesquisar no banco de dados o produto pelo nome
+    // find() -> buscar no banco de dados (mongoose)
+    // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
+    // ATENÇÃO: nomeProduto -> model | proNome -> renderizador
+    try {
+        const dadosBarcode = await produtoModel.find ({
+            barcodeProduto: new RegExp(barCode, 'i')
+        })
+        console.log(dadosBarcode) // teste do passo 3 e 4
+        // Passo 5 - slide -> enviar os dados do produto para o renderizador (JSON.stringify converte para JSON)
+        event.reply('data-barcode', JSON.stringify(dadosBarcode))
+    } catch (error) {
+        console.log(error)
+    }
+})
+// Fim CRUD Read Barcode <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

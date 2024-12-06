@@ -1,6 +1,6 @@
 /**
  * Processo de renderização
- * produtos.html
+ * produtos.js
  */
 
 // Array usado nos métodos para manipulação da estrutura de dados 
@@ -59,6 +59,33 @@ function buscarProduto() {
     })
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+function buscarProdutoPorBarcode() {
+    // Passo 1 (slide)
+    let barNome = document.getElementById('searchBarcode').value
+    console.log(barNome)
+    // Passo 2 (slide) - Enviar o pedido de busca do produto ao main
+    api.buscarProdutoPorBarcode(barNome)
+    // Passo 5 - Recebimento dos dados do produto
+    api.renderizarBarcode((event, dadosBarcode) => {
+        // teste de recebimento dos dados do produto
+        console.log(dadosBarcode)
+        // Passo 6 (slide) - Renderização dos dados dos produto no formulário
+        const barcodeRenderizado = JSON.parse(dadosBarcode)
+        arrayProduto = barcodeRenderizado
+        // teste para entendimento da lógica
+        console.log(arrayProduto)
+        // percorrer o array de produtos, extrair os dados e setar (preencher) os campos do formulário
+        arrayProduto.forEach((c) => {
+            document.getElementById('inputNameProduct').value = c.nomeProduto
+            document.getElementById('inputBarcodeProduct').value = c.barcodeProduto
+            document.getElementById('inputPriceProduct').value = c.precoProduto
+            document.getElementById('inputProduct').value = c._id
+        })
+    })
+}
+// CRUD Read por Código de Barras >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+// Fim do CRUD Read por Código de Barras <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 

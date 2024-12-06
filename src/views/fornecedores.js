@@ -1,6 +1,6 @@
 /**
  * Processo de renderização
- * fornecedores.html
+ * fornecedores.js
  */
 
 // Array usado nos métodos para manipulação da estrutura de dados 
@@ -15,6 +15,7 @@ let foneFornecedor = document.getElementById('inputPhoneSupplier')
 let siteFornecedor = document.getElementById('inputSiteSupplier')
 let cepFornecedor = document.getElementById('inputCepSupplier')
 let logradouroFornecedor = document.getElementById('inputLogradouroSupplier')
+let numeroFornecedor = document.getElementById('inputNumeroSupplier')
 let bairroFornecedor = document.getElementById('inputBairroSupplier')
 let cidadeFornecedor = document.getElementById('inputCidadeSupplier')
 let ufFornecedor = document.getElementById('inputUfSupplier')
@@ -34,6 +35,7 @@ formFornecedor.addEventListener('submit', async (event) => {
         siteFor: siteFornecedor.value,
         cepFor: cepFornecedor.value,
         logradouroFor: logradouroFornecedor.value,
+        numeroFor: numeroFornecedor.value,
         bairroFor: bairroFornecedor.value,
         cidadeFor: cidadeFornecedor.value,
         ufFor: ufFornecedor.value
@@ -63,6 +65,12 @@ function buscarFornecedor() {
             document.getElementById('inputNameSupplier').value = c.nomeFornecedor
             document.getElementById('inputPhoneSupplier').value = c.foneFornecedor
             document.getElementById('inputSiteSupplier').value = c.siteFornecedor
+            document.getElementById('inputCepSupplier').value = c.cepFornecedor
+            document.getElementById('inputLogradouroSupplier').value = c.logradouroFornecedor
+            document.getElementById('inputNumeroSupplier').value = c.numeroFornecedor
+            document.getElementById('inputBairroSupplier').value = c.bairroFornecedor
+            document.getElementById('inputCidadeSupplier').value = c.cidadeFornecedor
+            document.getElementById('inputUfSupplier').value = c.ufFornecedor
             document.getElementById('inputSupplier').value = c._id
         })
     })
@@ -181,6 +189,7 @@ api.resetarFormulario((args) => {
     document.getElementById('inputSiteSupplier').value = ""
     document.getElementById('inputCepSupplier').value = ""
     document.getElementById('inputLogradouroSupplier').value = ""
+    document.getElementById('inputNumeroSupplier').value = ""
     document.getElementById('inputBairroSupplier').value = ""
     document.getElementById('inputCidadeSupplier').value = ""
     document.getElementById('inputUfSupplier').value = ""

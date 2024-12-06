@@ -55,25 +55,29 @@
             </div>
 
             <!-- Novo campo: Logradouro -->
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <label for="inputLogradouroSupplier" class="form-label">Logradouro</label>
                 <input class="form-control" type="text" id="inputLogradouroSupplier" required>
             </div>
 
-            <!-- Novo campo: Bairro -->
-            <div class="col-md-8">
+            <!-- Novo campo: Número -->
+            <div class="col-md-5">
+                <label for="inputNumeroSupplier" class="form-label">Número</label>
+                <input class="form-control" type="number" id="inputNumeroSupplier" required>
+            </div>
+
+            <!-- Novo campo: Bairro e Cidade lado a lado -->
+            <div class="col-md-6">
                 <label for="inputBairroSupplier" class="form-label">Bairro</label>
                 <input class="form-control" type="text" id="inputBairroSupplier" required>
             </div>
-
-            <!-- Novo campo: Cidade -->
             <div class="col-md-6">
                 <label for="inputCidadeSupplier" class="form-label">Cidade</label>
                 <input class="form-control" type="text" id="inputCidadeSupplier" required>
             </div>
 
             <!-- Novo campo: UF -->
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label for="inputUfSupplier" class="form-label">UF</label>
                 <select class="form-control" id="inputUfSupplier" required>
                     <option value="">Selecione o estado</option>
@@ -107,12 +111,12 @@
                 </select>
             </div>
 
-            <!-- Botões -->
-            <div class="mt-5">
-                <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
-                <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
-                <button type="submit" class="btn btn-danger" id="btnDelete">Excluir</button>
-                <button type="reset" class="btn" id="btnReset"></button>
+            <!-- Botões ao lado do campo UF com espaçamento -->
+            <div class="col-md-6 mt-5 d-flex">
+                <button type="submit" class="btn btn-success ms-2" id="btnCreate">Adicionar</button>
+                <button type="submit" class="btn btn-warning ms-2" id="btnUpdate">Editar</button>
+                <button type="submit" class="btn btn-danger ms-2" id="btnDelete">Excluir</button>
+                <button type="reset" class="btn ms-2" id="btnReset"></button>
             </div>
 
         </form>
