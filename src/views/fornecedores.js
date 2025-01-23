@@ -6,10 +6,9 @@
 // Array usado nos métodos para manipulação da estrutura de dados 
 let arrayFornecedor = []
 
-// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 // Passo 1 - slide (capturar os dados dos inputs do form)
 let formFornecedor = document.getElementById('frmSupplier')
+let idFornecedor = document.getElementById('inputIdSupplier')
 let nomeFornecedor = document.getElementById('inputNameSupplier')
 let foneFornecedor = document.getElementById('inputPhoneSupplier')
 let siteFornecedor = document.getElementById('inputSiteSupplier')
@@ -20,29 +19,50 @@ let bairroFornecedor = document.getElementById('inputBairroSupplier')
 let cidadeFornecedor = document.getElementById('inputCidadeSupplier')
 let ufFornecedor = document.getElementById('inputUfSupplier')
 
+// CRUD Create/Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Evento associado ao botão adicionar (quando o botão for pressionado)
 formFornecedor.addEventListener('submit', async (event) => {
     // Evitar o comportamento padrão de envio em um form
     event.preventDefault()
     // Teste importante! (fluxo dos dados)
-    // console.log(nomeCliente.value, foneCliente.value, emailCliente.value)
+    // console.log(nomeFornecedor.value, foneForncedor.value, emailFornecedor.value)
 
     // Passo 2 - slide (envio das informações para o main)
-    // Criar um objeto
-    const fornecedor = {
-        nomeFor: nomeFornecedor.value,
-        foneFor: foneFornecedor.value,
-        siteFor: siteFornecedor.value,
-        cepFor: cepFornecedor.value,
-        logradouroFor: logradouroFornecedor.value,
-        numeroFor: numeroFornecedor.value,
-        bairroFor: bairroFornecedor.value,
-        cidadeFor: cidadeFornecedor.value,
-        ufFor: ufFornecedor.value
+    // Estratégia para determinar se é um novo cadastro de fornecedor ou a edição de um fornecedor já existente
+    if (idFornecedor.value === "") {
+        // Criar um objeto
+        const fornecedor = {
+            nomeFor: nomeFornecedor.value,
+            foneFor: foneFornecedor.value,
+            siteFor: siteFornecedor.value,
+            cepFor: cepFornecedor.value,
+            logradouroFor: logradouroFornecedor.value,
+            numeroFor: numeroFornecedor.value,
+            bairroFor: bairroFornecedor.value,
+            cidadeFor: cidadeFornecedor.value,
+            ufFor: ufFornecedor.value
+        }
+        api.novoFornecedor(fornecedor)
+    } else {
+        // Criar um objeto
+        const fornecedor = {
+            idFor: idFornecedor.value,
+            nomeFor: nomeFornecedor.value,
+            foneFor: foneFornecedor.value,
+            siteFor: siteFornecedor.value,
+            cepFor: cepFornecedor.value,
+            logradouroFor: logradouroFornecedor.value,
+            numeroFor: numeroFornecedor.value,
+            bairroFor: bairroFornecedor.value,
+            cidadeFor: cidadeFornecedor.value,
+            ufFor: ufFornecedor.value
+        }
+        api.editarFornecedor(fornecedor)
     }
-    api.novoFornecedor(fornecedor)
 })
-// Fim do CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+   
+// Fim do CRUD Create/Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function buscarFornecedor() {
@@ -71,12 +91,18 @@ function buscarFornecedor() {
             document.getElementById('inputBairroSupplier').value = c.bairroFornecedor
             document.getElementById('inputCidadeSupplier').value = c.cidadeFornecedor
             document.getElementById('inputUfSupplier').value = c.ufFornecedor
-            document.getElementById('inputSupplier').value = c._id
+            document.getElementById('inputIdSupplier').value = c._id
         })
     })
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+// CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function excluirFornecedor() {
+    api.deletarFornecedor(idFornecedor.value) // Passo 1 do slide
+}
+// Fim do CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 // Função para preencher os dados de endereço automaticamente

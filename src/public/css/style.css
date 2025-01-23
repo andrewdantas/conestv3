@@ -1,3 +1,16 @@
+/* input id */
+#idClient {
+    display: none;
+}
+
+#idSupplier{
+    display: none;
+}
+
+#idProduct {
+    display: none;
+}
+
 /* botões */
 
 .button img {

@@ -16,14 +16,20 @@ contextBridge.exposeInMainWorld('api', {
     janelaRelatorios: () => ipcRenderer.send('open-reports'),
     resetarFormulario: (args) => ipcRenderer.on('reset-form', args),
     novoCliente: (cliente) => ipcRenderer.send('new-client', cliente),
-    novoFornecedor: (fornecedor) => ipcRenderer.send('new-supplier', fornecedor),
-    novoProduto: (produto) => ipcRenderer.send('new-product', produto),
     buscarCliente: (cliNome) => ipcRenderer.send('search-client', cliNome),
     renderizarCliente: (dadosCliente) => ipcRenderer.on('data-client', dadosCliente),
+    deletarCliente: (idCliente) => ipcRenderer.send('delete-client', idCliente),
+    editarCliente: (cliente) => ipcRenderer.send('update-client', cliente),
+    novoFornecedor: (fornecedor) => ipcRenderer.send('new-supplier', fornecedor),
     buscarFornecedor: (forNome) => ipcRenderer.send('search-supplier', forNome),
     renderizarFornecedor: (dadosFornecedor) => ipcRenderer.on('data-supplier', dadosFornecedor),
+    deletarFornecedor: (idFornecedor) => ipcRenderer.send('delete-supplier', idFornecedor),
+    editarFornecedor: (fornecedor) => ipcRenderer.send('update-supplier', fornecedor),
+    novoProduto: (produto) => ipcRenderer.send('new-product', produto),
     buscarProduto: (proNome) => ipcRenderer.send('search-product', proNome),
     renderizarProduto: (dadosProduto) => ipcRenderer.on('data-product', dadosProduto),
     buscarProdutoPorBarcode: (barCode) => ipcRenderer.send('search-barcode', barCode),
-    renderizarBarcode: (dadosBarcode) => ipcRenderer.on('data-barcode', dadosBarcode)
+    renderizarBarcode: (dadosBarcode) => ipcRenderer.on('data-barcode', dadosBarcode),
+    deletarProduto: (idProduto) => ipcRenderer.send('delete-product', idProduto),
+    editarProduto: (produto) => ipcRenderer.send('update-product', produto)
 })

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog} = require('electron/main')
+const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog } = require('electron/main')
 const path = require('node:path')
 
 // Importação módulo de conexão 
@@ -31,8 +31,8 @@ function createWindow() {
     })
 
     // Menu personalizado (comentar para debugar)
-   // Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-    
+    // Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+
     win.loadFile('./src/views/index.html')
 
     // botões
@@ -54,12 +54,12 @@ function createWindow() {
 }
 
 // Janela Sobre
-function aboutWindow () {
+function aboutWindow() {
     nativeTheme.themeSource = "light"
     const main = BrowserWindow.getFocusedWindow()
     let about
     if (main) {
-        about = new BrowserWindow ({
+        about = new BrowserWindow({
             width: 1280,
             height: 720,
             autoHideMenuBar: true,
@@ -71,9 +71,9 @@ function aboutWindow () {
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
-         })
+        })
     }
-    
+
     about.loadFile('./src/views/sobre.html')
 
     // Fechar a janela quando receber mensagem do processo de renderização.
@@ -86,12 +86,12 @@ function aboutWindow () {
 }
 
 // Janela Clientes
-function clientWindow () {
+let client
+function clientWindow() {
     nativeTheme.themeSource = "light"
     const main = BrowserWindow.getFocusedWindow()
-    let client
     if (main) {
-        client = new BrowserWindow ({
+        client = new BrowserWindow({
             width: 1280,
             height: 720,
             //autoHideMenuBar: true,
@@ -103,20 +103,20 @@ function clientWindow () {
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
-         })
+        })
     }
-    
+
     client.loadFile('./src/views/clientes.html')
 
 }
 
 // Janela Fornecedores
-function supplierWindow () {
+let supplier
+function supplierWindow() {
     nativeTheme.themeSource = "light"
     const main = BrowserWindow.getFocusedWindow()
-    let supplier
     if (main) {
-        supplier = new BrowserWindow ({
+        supplier = new BrowserWindow({
             width: 1280,
             height: 720,
             autoHideMenuBar: true,
@@ -128,20 +128,20 @@ function supplierWindow () {
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
-         })
+        })
     }
-    
+
     supplier.loadFile('./src/views/fornecedores.html')
 
 }
 
 // Janela Produtos
-function productsWindow () {
+let products
+function productsWindow() {
     nativeTheme.themeSource = "light"
     const main = BrowserWindow.getFocusedWindow()
-    let products
     if (main) {
-        products = new BrowserWindow ({
+        products = new BrowserWindow({
             width: 1280,
             height: 720,
             autoHideMenuBar: true,
@@ -153,20 +153,20 @@ function productsWindow () {
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
-         })
+        })
     }
-    
+
     products.loadFile('./src/views/produtos.html')
 
 }
 
 // Janela Relatórios
-function reportsWindow () {
+let reports
+function reportsWindow() {
     nativeTheme.themeSource = "light"
     const main = BrowserWindow.getFocusedWindow()
-    let reports
     if (main) {
-        reports = new BrowserWindow ({
+        reports = new BrowserWindow({
             width: 1280,
             height: 720,
             autoHideMenuBar: true,
@@ -178,9 +178,9 @@ function reportsWindow () {
             webPreferences: {
                 preload: path.join(__dirname, 'preload.js')
             }
-         })
+        })
     }
-    
+
     reports.loadFile('./src/views/relatorios.html')
 
 }
@@ -193,7 +193,7 @@ app.whenReady().then(() => {
     // Importar antes o módulo de conexã no início do código
 
     // conexão com o banco de dados
-    ipcMain.on('db-connect', async(event, message) => {
+    ipcMain.on('db-connect', async (event, message) => {
         // a linha abaixo estabelece a conexão com o banco
         dbcon = await dbConnect()
         // enviar ao renderizador uma mensagem para trocar o ícone do status do banco de dados
@@ -258,17 +258,17 @@ const template = [
         label: 'Zoom',
         submenu: [
             {
-                label:'Aplicar zoom',
+                label: 'Aplicar zoom',
                 role: 'zoomIn'
             },
 
             {
-                label:'Reduzir',
+                label: 'Reduzir',
                 role: 'zoomOut'
             },
 
             {
-                label:'Restaurar o zoom padrão',
+                label: 'Restaurar o zoom padrão',
                 role: 'resetZoom'
             },
         ]
@@ -284,7 +284,7 @@ const template = [
 
             {
                 label: 'Sobre',
-                click: () => aboutWindow() 
+                click: () => aboutWindow()
             }
         ]
     }
@@ -330,6 +330,7 @@ ipcMain.on('new-client', async (event, cliente) => {
     } catch (error) {
         console.log(error)
     }
+
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -343,7 +344,7 @@ ipcMain.on('search-client', async (event, cliNome) => {
     // RegExp -> filtro pelo nome do cliente, 'i' insensitive ( maiúsculo ou minúsculo)
     // ATENÇÃO: nomeCliente -> model | cliNome -> renderizador
     try {
-        const dadosCliente = await clienteModel.find ({
+        const dadosCliente = await clienteModel.find({
             nomeCliente: new RegExp(cliNome, 'i')
         })
         console.log(dadosCliente) // teste do passo 3 e 4
@@ -355,7 +356,74 @@ ipcMain.on('search-client', async (event, cliNome) => {
 })
 // Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+// CRUD Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('update-client', async (event, cliente) => {
+    // teste de recebimento dos dados do cliente ( passo 2 )
+    console.log(cliente)
+    try {
+        const clienteEditado = await clienteModel.findByIdAndUpdate(
+            cliente.idCli, {
+            nomeCliente: cliente.nomeCli,
+            foneCliente: cliente.foneCli,
+            emailCliente: cliente.emailCli,
+            cepCliente: cliente.cepCli,
+            logradouroCliente: cliente.logradouroCli,
+            numeroCliente: cliente.numeroCli,
+            bairroCliente: cliente.bairroCli,
+            cidadeCliente: cliente.cidadeCli,
+            ufCliente: cliente.ufCli
+        },
+            {
+                new: true
+            }
+        )
 
+    } catch (error) {
+        console.log(error)
+    }
+    dialog.showMessageBox(client, {
+        type: 'info',
+        message: 'Dados do cliente alterados com sucesso.',
+        buttons: ['OK']
+    }).then((result) => {
+        if (result.response === 0) {
+            event.reply('reset-form')
+        }
+    })
+})
+// Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ipcMain.on('delete-client', async (event, idCliente) => {
+    //Teste de recebimento do id do Cliente (passo 2 do slide)
+    console.log(idCliente)
+    // Confirmação antes de excluir o cliente *IMPORTANTE*
+    // "client" é a variável ref a janela de cleintes
+    const { response } = await dialog.showMessageBox(client, {
+        type: 'warning',
+        buttons: ['Cancelar', 'Excluir'], //[0,1]
+        title: 'Atenção!',
+        message: 'Tem certeza que deseja excluir esse cliente?'
+    })
+    // apoio a lógica
+    console.log(response)
+    if (response === 1) {
+        // Passo 3 slide
+        try {
+            const clienteExcluido = await clienteModel.findByIdAndDelete(idCliente)
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Aviso',
+                message: 'Cliente excluído com sucesso!!!',
+                buttons: ['OK']
+            })
+            event.reply('reset-form')
+        } catch (error) {
+
+        }
+    }
+})
+// Fim do CRUD delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 /********************************************/
 /*************** Fornecedores **************/
@@ -411,7 +479,7 @@ ipcMain.on('search-supplier', async (event, forNome) => {
     // RegExp -> filtro pelo nome do fornecedor, 'i' insensitive ( maiúsculo ou minúsculo)
     // ATENÇÃO: nomeFornecedor -> model | forNome -> renderizador
     try {
-        const dadosFornecedor = await fornecedorModel.find ({
+        const dadosFornecedor = await fornecedorModel.find({
             nomeFornecedor: new RegExp(forNome, 'i')
         })
         console.log(dadosFornecedor) // teste do passo 3 e 4
@@ -422,6 +490,75 @@ ipcMain.on('search-supplier', async (event, forNome) => {
     }
 })
 // Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('update-supplier', async (event, fornecedor) => {
+    // teste de recebimento dos dados do fornecedor ( passo 2 )
+    console.log(fornecedor)
+    try {
+        const fornecedorEditado = await fornecedorModel.findByIdAndUpdate(
+            fornecedor.idFor, {
+            nomeFornecedor: fornecedor.nomeFor,
+            foneFornecedor: fornecedor.foneFor,
+            siteFornecedor: fornecedor.siteFor,
+            cepFornecedor: fornecedor.cepFor,
+            logradouroFornecedor: fornecedor.logradouroFor,
+            numeroFornecedor: fornecedor.numeroFor,
+            bairroFornecedor: fornecedor.bairroFor,
+            cidadeFornecedor: fornecedor.cidadeFor,
+            ufFornecedor: fornecedor.ufFor
+        },
+            {
+                new: true
+            }
+        )
+
+    } catch (error) {
+        console.log(error)
+    }
+    dialog.showMessageBox(supplier, {
+        type: 'info',
+        message: 'Dados do fornecedor alterados com sucesso.',
+        buttons: ['OK']
+    }).then((result) => {
+        if (result.response === 0) {
+            event.reply('reset-form')
+        }
+    })
+})
+// Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ipcMain.on('delete-supplier', async (event, idFornecedor) => {
+    //Teste de recebimento do id do Fornecedor (passo 2 do slide)
+    console.log(idFornecedor)
+    // Confirmação antes de excluir o Fornecedor *IMPORTANTE*
+    // "supplier" é a variável ref a janela de fornecedor
+    const { response } = await dialog.showMessageBox(supplier, {
+        type: 'warning',
+        buttons: ['Cancelar', 'Excluir'], //[0,1]
+        title: 'Atenção!',
+        message: 'Tem certeza que deseja excluir esse fornecedor?'
+    })
+    // apoio a lógica
+    console.log(response)
+    if (response === 1) {
+        // Passo 3 slide
+        try {
+            const fornecedorExcluido = await fornecedorModel.findByIdAndDelete(idFornecedor)
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Aviso',
+                message: 'Fornecedor excluído com sucesso!!!',
+                buttons: ['OK']
+            })
+            event.reply('reset-form')
+        } catch (error) {
+
+        }
+    }
+})
+// Fim do CRUD delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 
@@ -472,7 +609,7 @@ ipcMain.on('search-product', async (event, proNome) => {
     // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
     // ATENÇÃO: nomeProduto -> model | proNome -> renderizador
     try {
-        const dadosProduto = await produtoModel.find ({
+        const dadosProduto = await produtoModel.find({
             nomeProduto: new RegExp(proNome, 'i')
         })
         console.log(dadosProduto) // teste do passo 3 e 4
@@ -493,7 +630,7 @@ ipcMain.on('search-barcode', async (event, barCode) => {
     // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
     // ATENÇÃO: nomeProduto -> model | proNome -> renderizador
     try {
-        const dadosBarcode = await produtoModel.find ({
+        const dadosBarcode = await produtoModel.find({
             barcodeProduto: new RegExp(barCode, 'i')
         })
         console.log(dadosBarcode) // teste do passo 3 e 4
@@ -504,3 +641,66 @@ ipcMain.on('search-barcode', async (event, barCode) => {
     }
 })
 // Fim CRUD Read Barcode <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+ipcMain.on('update-product', async (event, produto) => {
+    // teste de recebimento dos dados do produto ( passo 2 )
+    console.log(produto)
+    try {
+        const produtoEditado = await produtoModel.findByIdAndUpdate(
+            produto.idPro, {
+            nomeProduto: produto.nomePro,
+            barcodeProduto: produto.barcodePro,
+            precoProduto: produto.precoPro
+        },
+            {
+                new: true
+            }
+        )
+
+    } catch (error) {
+        console.log(error)
+    }
+    dialog.showMessageBox(products, {
+        type: 'info',
+        message: 'Dados do produto alterados com sucesso.',
+        buttons: ['OK']
+    }).then((result) => {
+        if (result.response === 0) {
+            event.reply('reset-form')
+        }
+    })
+})
+// Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ipcMain.on('delete-product', async (event, idProduto) => {
+    //Teste de recebimento do id do Produto (passo 2 do slide)
+    console.log(idProduto)
+    // Confirmação antes de excluir o Produto *IMPORTANTE*
+    // "products" é a variável ref a janela de produtos
+    const { response } = await dialog.showMessageBox(products, {
+        type: 'warning',
+        buttons: ['Cancelar', 'Excluir'], //[0,1]
+        title: 'Atenção!',
+        message: 'Tem certeza que deseja excluir esse produto?'
+    })
+    // apoio a lógica
+    console.log(response)
+    if (response === 1) {
+        // Passo 3 slide
+        try {
+            const produtoExcluido = await produtoModel.findByIdAndDelete(idProduto)
+            dialog.showMessageBox({
+                type: 'info',
+                title: 'Aviso',
+                message: 'Produto excluído com sucesso!!!',
+                buttons: ['OK']
+            })
+            event.reply('reset-form')
+        } catch (error) {
+
+        }
+    }
+})
+// Fim do CRUD delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

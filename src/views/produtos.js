@@ -6,31 +6,44 @@
 // Array usado nos métodos para manipulação da estrutura de dados 
 let arrayProduto = []
 
-// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 // Passo 1 - slide (capturar os dados dos inputs do form)
 let formProduto = document.getElementById('frmProduct')
+let idProduto = document.getElementById('inputIdProduct')
 let nomeProduto = document.getElementById('inputNameProduct')
 let barcodeProduto = document.getElementById('inputBarcodeProduct')
 let precoProduto = document.getElementById('inputPriceProduct')
 
+// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Evento associado ao botão adicionar (quando o botão for pressionado)
 formProduto.addEventListener('submit', async (event) => {
     // Evitar o comportamento padrão de envio em um form
     event.preventDefault()
     // Teste importante! (fluxo dos dados)
-    // console.log(nomeCliente.value, foneCliente.value, emailCliente.value)
+    // console.log(nomeProduto.value, barcodeProduto.value, precoProduto.value)
 
     // Passo 2 - slide (envio das informações para o main)
+    // Estratégia para determinar se é um novo cadastro de produto ou a edição de um produto já existente
     // Criar um objeto
-    const produto = {
-        nomePro: nomeProduto.value,
-        barcodePro: barcodeProduto.value,
-        precoPro: precoProduto.value
+    if (idProduto.value === "") {
+        // Criar um objeto
+        const produto = {
+            nomePro: nomeProduto.value,
+            barcodePro: barcodeProduto.value,
+            precoPro: precoProduto.value,
+        }
+        api.novoProduto(produto)
+    } else {
+        // Criar um objeto
+        const produto = {
+            idPro: idProduto.value,
+            nomeFor: nomeProduto.value,
+            barcodePro: barcodeProduto.value,
+            precoPro: precoProduto.value,
+        }
+        api.editarProduto(produto)
     }
-    api.novoProduto(produto)
 })
-// Fim do CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// Fim do CRUD Create/Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 // CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -54,11 +67,13 @@ function buscarProduto() {
             document.getElementById('inputNameProduct').value = c.nomeProduto
             document.getElementById('inputBarcodeProduct').value = c.barcodeProduto
             document.getElementById('inputPriceProduct').value = c.precoProduto
-            document.getElementById('inputProduct').value = c._id
+            document.getElementById('inputIdProduct').value = c._id
         })
     })
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Read por Código de Barras >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function buscarProdutoPorBarcode() {
     // Passo 1 (slide)
     let barNome = document.getElementById('searchBarcode').value
@@ -79,13 +94,17 @@ function buscarProdutoPorBarcode() {
             document.getElementById('inputNameProduct').value = c.nomeProduto
             document.getElementById('inputBarcodeProduct').value = c.barcodeProduto
             document.getElementById('inputPriceProduct').value = c.precoProduto
-            document.getElementById('inputProduct').value = c._id
+            document.getElementById('inputIdProduct').value = c._id
         })
     })
 }
-// CRUD Read por Código de Barras >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 // Fim do CRUD Read por Código de Barras <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function excluirProduto() {
+    api.deletarProduto(idProduto.value) // Passo 1 do slide
+}
+// Fim do CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 

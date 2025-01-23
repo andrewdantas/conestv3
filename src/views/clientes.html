@@ -21,13 +21,13 @@
                 <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary" id="btnRead" onclick="buscarCliente()">Buscar</button>
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarCliente()">Buscar</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
 
             <!-- ID do cliente -->
             <div class="col-md-6" id="idClient">
-                <input class="form-control" type="text" id="inputClient" placeholder="id">
+                <input class="form-control" type="text" id="inputIdClient" placeholder="id">
             </div>
 
             <!-- Nome do cliente -->
@@ -115,7 +115,7 @@
             <div class="col-md-6 mt-5 d-flex">
                 <button type="submit" class="btn btn-success ms-2" id="btnCreate">Adicionar</button>
                 <button type="submit" class="btn btn-warning ms-2" id="btnUpdate">Editar</button>
-                <button type="submit" class="btn btn-danger ms-2" id="btnDelete">Excluir</button>
+                <button type="button" class="btn btn-danger ms-2" id="btnDelete" onclick="excluirCliente()">Excluir</button>
                 <button type="reset" class="btn ms-2" id="btnReset"></button>
             </div>
 

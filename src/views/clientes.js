@@ -6,10 +6,9 @@
 // Array usado nos métodos para manipulação da estrutura de dados 
 let arrayCliente = []
 
-// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 // Passo 1 - slide (capturar os dados dos inputs do form)
 let formCliente = document.getElementById('frmClient')
+let idCliente = document.getElementById('inputIdClient')
 let nomeCliente = document.getElementById('inputNameClient')
 let foneCliente = document.getElementById('inputPhoneClient')
 let emailCliente = document.getElementById('inputEmailClient')
@@ -20,30 +19,49 @@ let bairroCliente = document.getElementById('inputBairroClient')
 let cidadeCliente = document.getElementById('inputCidadeClient')
 let ufCliente = document.getElementById('inputUfClient')
 
-
+// CRUD Create/Update >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Evento associado ao botão adicionar (quando o botão for pressionado)
 formCliente.addEventListener('submit', async (event) => {
     // Evitar o comportamento padrão de envio em um form
     event.preventDefault()
-    // Teste importante! (fluxo dos dados)
-    // console.log(nomeCliente.value, foneCliente.value, emailCliente.value)
+        // Teste importante! (fluxo dos dados)
+        / console.log(idCliente.value, nomeCliente.value, foneCliente.value, emailCliente.value)
 
     // Passo 2 - slide (envio das informações para o main)
-    // Criar um objeto
-    const cliente = {
-        nomeCli: nomeCliente.value,
-        foneCli: foneCliente.value,
-        emailCli: emailCliente.value,
-        cepCli: cepCliente.value,
-        logradouroCli: logradouroCliente.value,
-        numeroCli: numeroCliente.value,
-        bairroCli: bairroCliente.value,
-        cidadeCli: cidadeCliente.value,
-        ufCli: ufCliente.value
+    // Estratégia para determinar se é um novo cadastro de cliente ou a edição de um cliente já existente
+    if (idCliente.value === "") {
+        // Criar um objeto
+        const cliente = {
+            nomeCli: nomeCliente.value,
+            foneCli: foneCliente.value,
+            emailCli: emailCliente.value,
+            cepCli: cepCliente.value,
+            logradouroCli: logradouroCliente.value,
+            numeroCli: numeroCliente.value,
+            bairroCli: bairroCliente.value,
+            cidadeCli: cidadeCliente.value,
+            ufCli: ufCliente.value
+        }
+        api.novoCliente(cliente)
+    } else {
+        // Criar um objeto
+        const cliente = {
+            idCli: idCliente.value,
+            nomeCli: nomeCliente.value,
+            foneCli: foneCliente.value,
+            emailCli: emailCliente.value,
+            cepCli: cepCliente.value,
+            logradouroCli: logradouroCliente.value,
+            numeroCli: numeroCliente.value,
+            bairroCli: bairroCliente.value,
+            cidadeCli: cidadeCliente.value,
+            ufCli: ufCliente.value
+        }
+        api.editarCliente(cliente)
     }
-    api.novoCliente(cliente)
 })
-// Fim do CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+// Fim do CRUD Create/Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 // CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -73,11 +91,18 @@ function buscarCliente() {
             document.getElementById('inputBairroClient').value = c.bairroCliente
             document.getElementById('inputCidadeClient').value = c.cidadeCliente
             document.getElementById('inputUfClient').value = c.ufCliente
-            document.getElementById('inputClient').value = c._id
+            document.getElementById('inputIdClient').value = c._id
         })
     })
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+
+// CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+function excluirCliente() {
+    api.deletarCliente(idCliente.value) // Passo 1 do slide
+}
+// Fim do CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 
@@ -195,4 +220,4 @@ api.resetarFormulario((args) => {
     document.getElementById('inputCidadeClient').value = ""
     document.getElementById('inputUfClient').value = ""
 })
-// Fim - Reset Form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// Fim - Reset Form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

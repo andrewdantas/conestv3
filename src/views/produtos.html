@@ -19,20 +19,21 @@
                 <input type="text" class="form-control" id="searchProduct" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
             </div>
+
             <!-- Buscar Produto Por Barcode -->
             <div class="col-md-6">
                 <input type="text" class="form-control" id="searchBarcode" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar por Código de Barras</button>
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar por Código de Barras</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
 
             <!-- ID do Produto -->
-            <div class="col-md-6" id="idSupplier">
-                <input class="form-control" type="text" id="inputProduct" placeholder="id">
+            <div class="col-md-6" id="idProduct">
+                <input class="form-control" type="text" id="inputIdProduct" placeholder="id">
             </div>
 
             <!-- Nome do Produto -->
@@ -59,7 +60,7 @@
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
                 <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
-                <button type="submit" class="btn btn-danger" id="btnDelete">Excluir</button>
+                <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirProduto()">Excluir</button>
                 <button type="reset" class="btn" id="btnReset"></button>
             </div>
 
