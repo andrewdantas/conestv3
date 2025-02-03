@@ -2,38 +2,39 @@
 #idClient {
     display: none;
 }
-
+ 
 #idSupplier{
     display: none;
 }
-
+ 
 #idProduct {
     display: none;
 }
-
+ 
 /* botões */
-
+ 
 .button img {
     margin: 50px 15px 25px 15px;
     padding: 5px;
     border: 1px solid #E8E8E8;
     cursor: pointer;
 }
-
+ 
 /* Botão reset */
 #btnReset {
     width: 50px;
-    height: 50px;
+    height: 45px;
     background-image: url('../img/clear.png');
     border: none;
     cursor: pointer;
     margin-left: 10px;
+    margin-bottom: 5px;
 }
-
+ 
 /* rodapé */
-
+ 
 footer {
-    background-color: #007ACC;
+    background-color: #3c92cb;
     width: 100%;
     height: 40px;
     display: flex;
@@ -42,12 +43,18 @@ footer {
     position: fixed;
     bottom: 0;
 }
-
+ 
 footer p {
     color: #FFFFFF;
     margin: 0px 0px 0px 10px;
 }
-
+ 
 footer img {
     margin-right: 10px;
 }
+
+input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+}
+

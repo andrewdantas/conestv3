@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,77 +10,94 @@
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
-
+ 
 <body>
     <div class="container">
         <h1>Clientes</h1>
         <form id="frmClient" class="mt-2 row g-3">
-
+ 
             <!-- Buscar Cliente -->
             <div class="col-md-6">
-                <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false">
+                <input type="text" class="form-control" id="searchClient" maxlength="30" spellcheck="false"
+                    placeholder="">
             </div>
             <div class="col-md-4">
                 <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarCliente()">Buscar</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
-
+ 
             <!-- ID do cliente -->
             <div class="col-md-6" id="idClient">
                 <input class="form-control" type="text" id="inputIdClient" placeholder="id">
             </div>
-
+ 
+            <!--Bloqueio do formulario inputs
+            <div class="bloqueio">-->
+ 
             <!-- Nome do cliente -->
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <label for="inputNameClient" class="form-label">Nome</label>
                 <input class="form-control" type="text" id="inputNameClient" spellcheck="false" maxlength="50" required>
             </div>
-
-            <!-- Telefone do cliente -->
-            <div class="col-md-4">
-                <label for="inputPhoneClient" class="form-label">Telefone</label>
-                <input class="form-control" type="tel" id="inputPhoneClient" spellcheck="false" maxlength="15" required>
-            </div>
-
-            <!-- E-mail do cliente -->
-            <div class="col-md-8">
-                <label for="inputEmailClient" class="form-label">E-mail</label>
-                <input class="form-control" type="email" id="inputEmailClient" spellcheck="false" maxlength="50">
-            </div>
-
-            <!-- Novo campo: CEP -->
-            <div class="col-md-4">
-                <label for="inputCepClient" class="form-label">CEP</label>
-                <input class="form-control" type="text" id="inputCepClient" maxlength="9" required>
-            </div>
-
-            <!-- Novo campo: Logradouro -->
-            <div class="col-md-7">
-                <label for="inputLogradouroClient" class="form-label">Logradouro</label>
-                <input class="form-control" type="text" id="inputLogradouroClient" required>
-            </div>
-
-            <!-- Novo campo: Número -->
+ 
+            <!-- CPF do cliente -->
             <div class="col-md-5">
-                <label for="inputNumeroClient" class="form-label">Número</label>
-                <input class="form-control" type="number" id="inputNumeroClient" required>
+                <label for="inputCpfClient" class="form-label">CPF</label>
+                <input class="form-control" type="text" id="inputCpfClient" spellcheck="false" maxlength="11" placeholder="" required>
+                <span id="cpfMensagem"></span>
             </div>
-
-            <!-- Novo campo: Bairro e Cidade lado a lado -->
+ 
+            <!-- E-mail do cliente -->
+            <div class="col-md-4">
+                <label for="inputEmailClient" class="form-label">E-mail</label>
+                <input class="form-control" type="email" id="inputEmailClient" spellcheck="false" maxlength="50"
+                    required>
+            </div>
+ 
+            <!-- CEP -->
+            <div class="col-md-2">
+                <label for="inputCepClient" class="form-label">CEP</label>
+                <input class="form-control" type="text" id="inputCepClient" maxlength="9">
+            </div>
+ 
+            <!-- DDD do cliente -->
+            <div class="col-md-1">
+                <label for="inputdddClient" class="form-label">DDD</label>
+                <input class="form-control" type="tel" id="inputdddClient" spellcheck="false" maxlength="2">
+            </div>
+ 
+            <!-- TELEFONE do cliente -->
+            <div class="col-md-4">
+                <label for="inputTelefoneClient" class="form-label">Telefone</label>
+                <input class="form-control" type="text" id="inputTelefoneClient" spellcheck="false" maxlength="9"
+                    required>
+            </div>
+ 
+            <!-- Logradouro -->
             <div class="col-md-6">
+                <label for="inputLogradouroClient" class="form-label">Logradouro</label>
+                <input class="form-control" type="text" id="inputLogradouroClient">
+            </div>
+ 
+            <!-- Bairro -->
+            <div class="col-md-5">
                 <label for="inputBairroClient" class="form-label">Bairro</label>
-                <input class="form-control" type="text" id="inputBairroClient" required>
+                <input class="form-control" type="text" id="inputBairroClient">
             </div>
-            <div class="col-md-6">
+ 
+            <!-- cidade -->
+            <div class="col-md-4">
                 <label for="inputCidadeClient" class="form-label">Cidade</label>
-                <input class="form-control" type="text" id="inputCidadeClient" required>
+                <input class="form-control" type="text" id="inputCidadeClient">
             </div>
-
-            <!-- Novo campo: UF -->
-            <div class="col-md-6">
+ 
+ 
+ 
+            <!-- UF -->
+            <div class="col-md-1">
                 <label for="inputUfClient" class="form-label">UF</label>
-                <select class="form-control" id="inputUfClient" required>
-                    <option value="">Selecione o estado</option>
+                <select class="form-control" id="inputUfClient">
+                    <option value=""></option>
                     <option value="AC">AC</option>
                     <option value="AL">AL</option>
                     <option value="AP">AP</option>
@@ -110,19 +127,35 @@
                     <option value="TO">TO</option>
                 </select>
             </div>
-
-            <!-- Botões ao lado do campo UF com espaçamento -->
+            <!-- Número-->
+            <div class="col-md-2">
+                <label for="inputNumeroClient" class="form-label">Número</label>
+                <input class="form-control" type="number" id="inputNumeroClient">
+            </div>
+ 
+            <!-- Complemento-->
+            <div class="col-md-2">
+                <label for="inputComplementoClient" class="form-label">Complemento</label>
+                <input class="form-control" type="text" id="inputComplementoClient">
+            </div>
+ 
+ 
+ 
+            <!--</div> FIM DO BLOQUEIO-->
+ 
+            <!-- Botões -->
             <div class="col-md-6 mt-5 d-flex">
                 <button type="submit" class="btn btn-success ms-2" id="btnCreate">Adicionar</button>
                 <button type="submit" class="btn btn-warning ms-2" id="btnUpdate">Editar</button>
-                <button type="button" class="btn btn-danger ms-2" id="btnDelete" onclick="excluirCliente()">Excluir</button>
-                <button type="reset" class="btn ms-2" id="btnReset"></button>
+                <button type="button" class="btn btn-danger ms-2" id="btnDelete"
+                    onclick="excluirCliente()">Excluir</button>
+                <button type="reset" class="btn ms-2" id="btnReset" onclick="resetForm()"></button>
             </div>
-
+ 
         </form>
     </div>
     <script src="../public/js/bootstrap.min.js"></script>
     <script src="clientes.js"></script>
 </body>
-
+ 
 </html>

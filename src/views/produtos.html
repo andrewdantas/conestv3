@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../public/css/bootstrap.min.css">
     <link rel="stylesheet" href="../public/css/style.css">
 </head>
-
+ 
 <body>
     <div class="container">
         <h1>Produtos</h1>
@@ -18,56 +18,56 @@
             <div class="col-md-6">
                 <input type="text" class="form-control" id="searchProduct" maxlength="30" spellcheck="false">
             </div>
-            <div class="col-md-4">
-                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
-            </div>
-
-            <!-- Buscar Produto Por Barcode -->
             <div class="col-md-6">
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar Nome</button>
+            </div>
+ 
+            <!-- Buscar Produto Por Barcode -->  <!--CODIGO UNO-->
+            <div id="frmProduct" class="col-md-6">
                 <input type="text" class="form-control" id="searchBarcode" maxlength="30" spellcheck="false">
             </div>
-            <div class="col-md-4">
-                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar por Código de Barras</button>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-info" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar Código</button>
             </div>
             <hr class="mt-4 border border-primary border -1">
-
+ 
             <!-- ID do Produto -->
-            <div class="col-md-6" id="idProduct">
+            <div class="col-md-7" id="idProduct">
                 <input class="form-control" type="text" id="inputIdProduct" placeholder="id">
             </div>
-
+ 
             <!-- Nome do Produto -->
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <label for="inputNameProduct" class="form-label">Produto</label>
                 <input class="form-control" type="text" id="inputNameProduct" spellcheck="false" maxlength="50"
                     required>
             </div>
-
+ 
             <!-- Barcode do Produto -->
-            <div class="col-md-4">
+            <div class="col-md-7">
                 <label for="inputBarcodeProduct" class="form-label">Barcode</label>
-                <input class="form-control" type="number" id="inputBarcodeProduct" spellcheck="false" maxlength="15"
+                <input class="form-control" type="text" id="inputBarcodeProduct" spellcheck="false" maxlength="15"
                     required>
             </div>
-
+ 
             <!-- Preço do Produto -->
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <label for="inputPriceProduct" class="form-label">Preço</label>
-                <input class="form-control" type="number" id="inputPriceProduct" spellcheck="false" maxlength="50">
+                <input class="form-control" type="number" id="inputPriceProduct" spellcheck="false" maxlength="50" required step="any">
             </div>
-
+ 
             <!-- Botões -->
             <div class="mt-5">
                 <button type="submit" class="btn btn-success" id="btnCreate">Adicionar</button>
                 <button type="submit" class="btn btn-warning" id="btnUpdate">Editar</button>
                 <button type="button" class="btn btn-danger" id="btnDelete" onclick="excluirProduto()">Excluir</button>
-                <button type="reset" class="btn" id="btnReset"></button>
+                <button type="reset" class="btn" id="btnReset" onclick="resetForm()"></button>
             </div>
-
+ 
         </form>
     </div>
     <script src="../public/js/bootstrap.min.js"></script>
     <script src="produtos.js"></script>
 </body>
-
+ 
 </html>
