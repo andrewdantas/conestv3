@@ -45,7 +45,9 @@
             <!-- Site do Fornecedor -->
             <div class="col-md-4">
                 <label for="inputSiteSupplier" class="form-label">Site</label>
-                <input class="form-control" type="text" id="inputSiteSupplier" spellcheck="false" maxlength="50">
+                <input class="form-control" type="url" id="inputSiteSupplier" spellcheck="false" maxlength="50" pattern="https://.*" title="o site deve começar com https://">
+                <span id="msgErroSite"></span>
+                <button type="button" class="mt-2 btn btn-secondary" id="btnUrl" onclick="acessarSite()">Acessar site</button>
             </div>
  
             <!-- Novo campo: CEP -->

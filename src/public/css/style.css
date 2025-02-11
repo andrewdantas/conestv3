@@ -7,9 +7,9 @@
     display: none;
 }
  
-#idProduct {
+/*#idProduct {
     display: none;
-}
+}*/
  
 /* botões */
  
@@ -31,10 +31,10 @@
     margin-bottom: 5px;
 }
  
-/* rodapé */
  
+/* rodapé */
 footer {
-    background-color: #3c92cb;
+    background-color: #007acc;
     width: 100%;
     height: 40px;
     display: flex;
@@ -52,9 +52,24 @@ footer p {
 footer img {
     margin-right: 10px;
 }
-
-input[type=number]::-webkit-inner-spin-button { 
+ 
+input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
-    
 }
-
+ 
+/* Imagem do produto */
+#imageProductPreview {
+    border: 1px solid #dfdfdf;
+    border-radius: 5px;
+    width: 240px;
+    height: 240px;
+    padding: 5px;
+    position: absolute;
+    top: 55.5vh;
+    left: 43.5vw;
+}
+ 
+#productimgview {
+    width: 30%;
+    height: auto;
+}

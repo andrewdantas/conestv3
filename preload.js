@@ -42,5 +42,6 @@ contextBridge.exposeInMainWorld('api', {
     setarNomeProduto: (args) => ipcRenderer.on('set-nameProduct', args),
     setarBarcode: (args) => ipcRenderer.on('set-barcode', args), 
     deletarBarcode: (idProduto) => ipcRenderer.send('delete-barcode', idProduto),
-    editarBarcode: (produto) => ipcRenderer.send('update-barcode', produto)
+    editarBarcode: (produto) => ipcRenderer.send('update-barcode', produto),
+    abrirSite: (site) => ipcRenderer.send('url-site', site)
 })

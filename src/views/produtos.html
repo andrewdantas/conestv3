@@ -14,47 +14,61 @@
     <div class="container">
         <h1>Produtos</h1>
         <form id="frmProduct" class="mt-2 row g-3">
+ 
+            <!-- Buscar Produto Por Barcode -->
+            <div id="frmProduct" class="col-md-6">
+                <input type="text" class="form-control" id="searchBarcode" maxlength="30" spellcheck="false">
+            </div>
+            <div class="col-md-2">
+                <img src="../public/img/barcode.png" alt="barcode" id="productimgview">
+                <!--<button type="button" class="btn btn-info" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar Código</button>-->
+            </div>
+           
+ 
             <!-- Buscar Produto -->
             <div class="col-md-6">
                 <input type="text" class="form-control" id="searchProduct" maxlength="30" spellcheck="false">
             </div>
             <div class="col-md-6">
-                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar Nome</button>
+                <button type="button" class="btn btn-primary" id="btnRead" onclick="buscarProduto()">Buscar</button>
             </div>
  
-            <!-- Buscar Produto Por Barcode -->  <!--CODIGO UNO-->
-            <div id="frmProduct" class="col-md-6">
-                <input type="text" class="form-control" id="searchBarcode" maxlength="30" spellcheck="false">
-            </div>
-            <div class="col-md-6">
-                <button type="button" class="btn btn-info" id="btnRead" onclick="buscarProdutoPorBarcode()">Buscar Código</button>
-            </div>
-            <hr class="mt-4 border border-primary border -1">
+            <hr class="mt-4 border border-secondary border -1">
  
             <!-- ID do Produto -->
-            <div class="col-md-7" id="idProduct">
-                <input class="form-control" type="text" id="inputIdProduct" placeholder="id">
+            <div class="col-md-5" id="idProduct">
+                <label for="inputIdProduct" class="form-label">ID</label>
+                <input class="form-control" type="text" id="inputIdProduct">
             </div>
+            <!--placeholder="id"-->
  
             <!-- Nome do Produto -->
-            <div class="col-md-7">
+            <div class="col-md-5">
                 <label for="inputNameProduct" class="form-label">Produto</label>
                 <input class="form-control" type="text" id="inputNameProduct" spellcheck="false" maxlength="50"
                     required>
             </div>
  
             <!-- Barcode do Produto -->
-            <div class="col-md-7">
+            <div class="col-md-5">
                 <label for="inputBarcodeProduct" class="form-label">Barcode</label>
                 <input class="form-control" type="text" id="inputBarcodeProduct" spellcheck="false" maxlength="15"
                     required>
             </div>
  
-            <!-- Preço do Produto -->
-            <div class="col-md-7">
+            <!--Preço do Produto-->
+            <!--step="any" // para colocar casas decimais-->
+            <div class="col-md-5">
                 <label for="inputPriceProduct" class="form-label">Preço</label>
                 <input class="form-control" type="number" id="inputPriceProduct" spellcheck="false" maxlength="50" required step="any">
             </div>
+ 
+            <!-- Imagem do produto -->
+            <div class="col-md-4">
+                <img src="../public/img/camera.png" alt="imagem" id="imageProductPreview">
+            </div>
+            <input type="file" id="imageProduct">
+ 
  
             <!-- Botões -->
             <div class="mt-5">

@@ -6,13 +6,26 @@
 const foco = document.getElementById('searchProduct') // Campo de busca pelo nome
 const focoBarcode = document.getElementById('searchBarcode'); // Campo de busca do barcode
  
-//Mudar as propriedades do documento html ao iniciar a janela
+// Mudar as propriedades do documento html ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
-    //btnCreate.disabled = true
+    // btnCreate.disabled = true
     btnUpdate.disabled = true
     btnDelete.disabled = true
     foco.focus()
+
+    // Adiciona o evento para o campo de código de barras
+    document.getElementById('searchBarcode').addEventListener('input', (event) => {
+        // Verifica se o campo de barcode foi alterado (presumimos que o leitor de código de barras digite diretamente)
+        if (event.target.value.length > 0) {
+            // Coloca o valor escaneado diretamente no campo de Barcode (não no nome do produto)
+            document.getElementById('inputBarcodeProduct').value = event.target.value;
+            
+            // Dispara a função de busca do produto por barcode
+            buscarProdutoPorBarcode();
+        }
+    });
 })
+
  
 // Manipulação do evento Enter para buscar por nome ou barcode
 function teclaEnter(event) {
@@ -88,60 +101,68 @@ formProduto.addEventListener('submit', async (event) => {
 function buscarProduto() {
     // Passo 1 (slide)
     let proNome = document.getElementById('searchProduct').value
-    //validação
+    // Validação
     if (proNome === "") {
-        api.validarBusca() //validação do campo obrigatório
-        foco.focus()
+        api.validarBusca(); // Validação do campo obrigatório
+        foco.focus();
     } else {
-        //console.log(proNome) // teste do passo 1
         // Passo 2 (slide) - Enviar o pedido de busca do produto ao main
-        api.buscarProduto(proNome)
+        api.buscarProduto(proNome);
+        
         // Passo 5 - Recebimento dos dados do produto
         api.renderizarProduto((event, dadosProduto) => {
-            // teste de recebimento dos dados do produto
-            console.log(dadosProduto)
+            // Teste de recebimento dos dados do produto
+            console.log(dadosProduto);
+            
             // Passo 6 (slide) - Renderização dos dados dos produto no formulário
-            const produtoRenderizado = JSON.parse(dadosProduto)
-            arrayProduto = produtoRenderizado
-            // teste para entendimento da lógica
-            console.log(arrayProduto)
-            // percorrer o array de produtos, extrair os dados e setar (preencher) os campos do formulário
+            const produtoRenderizado = JSON.parse(dadosProduto);
+            arrayProduto = produtoRenderizado;
+            
+            // Teste para entendimento da lógica
+            console.log(arrayProduto);
+            
+            // Percorrer o array de produtos, extrair os dados e setar (preencher) os campos do formulário
             arrayProduto.forEach((c) => {
-                document.getElementById('inputNameProduct').value = c.nomeProduto
-                document.getElementById('inputBarcodeProduct').value = c.barcodeProduto
-                document.getElementById('inputPriceProduct').value = c.precoProduto
-                document.getElementById('inputIdProduct').value = c._id
-                //limpar o campo de busca e remover o foco
-                foco.value = ""
- 
-                foco.disabled = true
-                btnRead.disabled = true
-                btnCreate.disabled = true
- 
-                //foco.blur()
-                //liberar os botões editar e excluir
-                document.getElementById('btnUpdate').disabled = false
-                document.getElementById('btnDelete').disabled = false
-                //restaurar o padrão da tecla Enter
-                restaurarEnter()
-            })
-        })
+                document.getElementById('inputNameProduct').value = c.nomeProduto;  // Preencher o nome do produto
+                document.getElementById('inputBarcodeProduct').value = c.barcodeProduto;
+                document.getElementById('inputPriceProduct').value = c.precoProduto;
+                document.getElementById('inputIdProduct').value = c._id;
+                
+                // Limpar o campo de busca e remover o foco
+                foco.value = "";
+                foco.disabled = true;
+                btnRead.disabled = true;
+                btnCreate.disabled = true;
+                
+                // Liberar os botões editar e excluir
+                document.getElementById('btnUpdate').disabled = false;
+                document.getElementById('btnDelete').disabled = false;
+                
+                // Restaurar o padrão da tecla Enter
+                restaurarEnter();
+            });
+        });
     }
-    //setar o nome do produto e liberar o botão adicionar
+
+    // Setar o nome do produto e liberar o botão adicionar
     api.setarNomeProduto(() => {
-        //setar o nome do produto      
-        let campoNome = document.getElementById('searchProduct').value
-        document.getElementById('inputNameProduct').focus()
-        document.getElementById('inputNameProduct').value = campoNome
-        //limpar o campo de busca e remover o foco
-        foco.value = ""
-        foco.blur()
-        //liberar o botão adicionar
-        btnCreate.disabled = false
-        //restaurar o padrão da tecla Enter
-        restaurarEnter()
-    })
+        // Setar o nome do produto
+        let campoNome = document.getElementById('searchProduct').value;
+        document.getElementById('inputNameProduct').focus();
+        document.getElementById('inputNameProduct').value = campoNome;  // Preencher o nome do produto no campo "Produto"
+        
+        // Limpar o campo de busca e remover o foco
+        foco.value = "";
+        foco.blur();
+        
+        // Liberar o botão adicionar
+        btnCreate.disabled = false;
+        
+        // Restaurar o padrão da tecla Enter
+        restaurarEnter();
+    });
 }
+
  
 //BARCODE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 //BARCODE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
