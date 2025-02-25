@@ -59,6 +59,7 @@ async function uploadImage() {
     caminhoImagem = await api.selecionarArquivo()
     console.log(caminhoImagem)
     imagem.src = `file://${caminhoImagem}`
+    btnCreate.focus()
 }
  
 formProduto.addEventListener('submit', async (event) => {
