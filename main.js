@@ -1,7 +1,7 @@
 const { app, BrowserWindow, nativeTheme, Menu, shell, ipcMain, dialog, globalShortcut } = require('electron/main')
 const path = require('node:path')
 
-// Importação módulo de conexão
+// Importação módulo de conexão 
 const { dbConnect, desconectar } = require('./database.js')
 // status de conexão com o banco. No MongoDB é mais eficiente mantrer uma única conexão aberta durante todo o tempo de vida do aplicativo e usá-lo quando necessário. Fechar e reabrir constantemente a conexão aumenta a sobrecarga e reduz o desempenho do servidor.
 // a variável abaixo é usada para garantir que o banco de dados inicie desconectado (evitar abrir outra instância).
@@ -16,8 +16,11 @@ const fornecedorModel = require('./src/models/Fornecedores.js')
 // importação do Schema Produtos da camada model
 const produtoModel = require('./src/models/Produtos.js')
 
+// importar biblioteca nativa do JS para manipulação de arquivos e diretórios
+const fs = require('fs')
 
-// Janela Principal 
+
+// Janela Principal
 let win
 function createWindow() {
     nativeTheme.themeSource = 'light'
@@ -30,7 +33,7 @@ function createWindow() {
         }
     })
 
-    // Menu personalizado (comentar para debugar)
+    // Menu personalizado
     Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
     win.loadFile('./src/views/index.html')
@@ -94,7 +97,7 @@ function clientWindow() {
         client = new BrowserWindow({
             width: 1100,
             height: 800,
-            autoHideMenuBar: true,
+            autoHideMenuBar: true, //menu dev
             resizable: true,
             minimizable: true,
             //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
@@ -160,7 +163,7 @@ function productsWindow() {
         products = new BrowserWindow({
             width: 1100,
             height: 800,
-            //autoHideMenuBar: true,
+            autoHideMenuBar: true,
             resizable: true,
             minimizable: true,
             //titleBarStyle: "hidden" // Esconder a barra de estilo (ex: totem de auto atendimento)
@@ -211,15 +214,16 @@ function reportsWindow() {
 
 // Execução assíncrona do aplicativo electron
 app.whenReady().then(() => {
-    // Registar atalho global para devtools em qualquer janela ativa
+    //Registrar atalho global para devtools em qualquer janela ativa
     globalShortcut.register('Ctrl+Shift+I', () => {
+        //constante que captura a janela (não importa qual)
         const tools = BrowserWindow.getFocusedWindow()
         if (tools) {
             tools.webContents.openDevTools()
         }
     })
 
-    // Desregistrar atalhos globais antes de sair
+    // Desregistrar o atalho global antes de sair
     app.on('will-quit', () => {
         globalShortcut.unregisterAll()
     })
@@ -255,9 +259,8 @@ app.on('window-all-closed', () => {
     }
 })
 
-// Reduzir logs não críticos (mensagens no console quando executar devtools)
+//reduzir logs não críticos (mensagens no console quando executar Devtools)
 app.commandLine.appendSwitch('log-level', '3')
-
 
 // Template do menu
 const template = [
@@ -277,24 +280,6 @@ const template = [
                 click: () => productsWindow()
             },
             {
-                label: 'Novo',
-                accelerator: 'CmdOrCtrl+N'
-            },
-
-            {
-                label: 'Abrir',
-                accelerator: 'CmdOrCtrl+O'
-            },
-            {
-                label: 'Salvar',
-                accelerator: 'CmdOrCtrl+S'
-            },
-            {
-                label: 'Salvar Como',
-                accelerator: 'CmdOrCtrl+Shift+S'
-            },
-
-            {
                 type: 'separator'
             },
             {
@@ -308,7 +293,6 @@ const template = [
     {
         label: 'Relatórios'
     },
-
     {
         label: 'Zoom',
         submenu: [
@@ -334,7 +318,7 @@ const template = [
         submenu: [
             {
                 label: 'Repositório',
-                click: () => shell.openExternal('SEU LINK DO GITHUB')
+                click: () => shell.openExternal('https://github.com/LeoMeloLeo')
             },
 
             {
@@ -518,13 +502,13 @@ ipcMain.on('delete-client', async (event, idCliente) => {
 /*************** Fornecedores **************/
 /******************************************/
 
-// Acessar site externo
+//Acessar site externo (busca do url)
 ipcMain.on('url-site', (event, site) => {
     let url = site.url
-    // console.log(url)
+    //console.log(url)
     shell.openExternal(url)
-    
 })
+
 
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Recebimento dos dados do formulário do fornecedor
@@ -688,11 +672,90 @@ ipcMain.on('delete-supplier', async (event, idFornecedor) => {
 /******************************************/
 
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//obter caminho da imagem (executar o open dialog)
+ipcMain.handle('open-file-dialog', async () => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+        title: "Selecionar imagem",
+        properties: ['openFile'],
+        filters: [
+            {
+                name: 'Imagens',
+                extensions: ['png', 'jpg', 'jpeg']
+            }
+        ]
+    })
+
+    if (canceled === true || filePaths.length === 0) {
+        return null
+    } else {
+        return filePaths[0] //retorna o caminho do arquivo      
+    }
+
+})
+
+
+
 // Recebimento dos dados do formulário do produto
 ipcMain.on('new-product', async (event, produto) => {
     // Teste de recebimento dos dados (Passo 2 - slide) Importante!
     console.log(produto)
 
+    //resoluão de BUG (quando a imagem não for selecionada)
+    let caminhoImagemSalvo = ""
+
+    try {
+        // Validação de imagens
+        if (produto.caminhoImagemPro) {
+            //================ (imagens #1)
+            // Criar a pasta uploads se não existir
+            //__dirname (caminho absoluto)
+            const uploadDir = path.join(__dirname, 'uploads')
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir)
+            }
+
+            //================ (imagens #2)
+            // Gerar um nome único para o arquivo (para não sobrescrever)
+            const fileName = `${Date.now()}_${path.basename(produto.caminhoImagemPro)}`
+            //console.log(fileName) //apoio a logica
+            const uploads = path.join(uploadDir, fileName)
+
+            //================ (imagens #3)
+            //Copiar o arquivo de imagem para a pasta uploads
+            fs.copyFileSync(produto.caminhoImagemPro, uploads)
+
+            //================ (imagens #4)
+            // alterar a variável caminhoImagemSalvo para uploads
+            caminhoImagemSalvo = uploads
+        }
+        // Cadastrar o produto no banco de dados
+        const novoProduto = new produtoModel({
+            nomeProduto: produto.nomePro,
+            barcodeProduto: produto.barcodePro,
+            precoProduto: produto.precoPro,
+            caminhoImagemProduto: caminhoImagemSalvo //salvando o caminho correto no banco
+        })
+
+        //adicionar produto no banco
+        await novoProduto.save()
+
+        //confirmação
+        dialog.showMessageBox({
+            type: 'info',
+            message: "Produto Adicionado com Sucesso",
+            buttons: ['OK']
+        }).then((result) => {
+            if (result.response === 0) {
+                event.reply('reset-form')
+            }
+        })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+
+    /*
     // Passo 3 - slide (cadastrar os dados do banco de dados)
     try {
         // Criar um novo objeto usando a classe modelo
@@ -710,6 +773,44 @@ ipcMain.on('new-product', async (event, produto) => {
             title: 'Aviso',
             message: "Produto Adicionado com Sucesso",
             buttons: ['OK']
+        }).then((result) => {
+            if (result.response === 0) {
+                event.reply('reset-form')
+            }
+        })
+        // Enviar uma resposta para o renderizador resetar o formulário
+        //event.reply('reset-form')
+
+    } catch (error) {
+        console.log(error)
+    }*/
+})
+// Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+//BARCODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// Recebimento dos dados do formulário do produto
+ipcMain.on('new-barcode', async (event, produto) => {
+    // Teste de recebimento dos dados (Passo 2 - slide) Importante!
+    console.log(produto)
+
+    // Passo 3 - slide (cadastrar os dados do banco de dados)
+    try {
+        // Criar um novo objeto usando a classe modelo
+        const novoBarcode = new produtoModel({
+            nomeProduto: produto.nomePro,
+            barcodeProduto: produto.barcodePro,
+            precoProduto: produto.precoPro
+        })
+        // A linha abaixo usa a biblioteca moongoose para salvar
+        await novoBarcode.save()
+
+        // Confirmação  de cliente  adicionado no banco
+        dialog.showMessageBox({
+            type: 'info',
+            title: 'Aviso',
+            message: "Produto Adicionado com Sucesso",
+            buttons: ['OK']
         })
         // Enviar uma resposta para o renderizador resetar o formulário
         event.reply('reset-form')
@@ -720,12 +821,10 @@ ipcMain.on('new-product', async (event, produto) => {
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-
-// CRUD Read - Nome barcode >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+// CRUD Read - Nome produto >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ipcMain.on('search-product', async (event, proNome) => {
     // teste de recebimento do nome do produto a ser pesquisado (passo 2)
-    console.log(proNome)
+    console.log(proNome);
     // Passo 3 e 4 - Pesquisar no banco de dados o produto pelo nome
     // find() -> buscar no banco de dados (mongoose)
     // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
@@ -733,8 +832,8 @@ ipcMain.on('search-product', async (event, proNome) => {
     try {
         const dadosProduto = await produtoModel.find({
             nomeProduto: new RegExp(proNome, 'i')
-        })
-        console.log(dadosProduto) // teste do passo 3 e 4
+        });
+        console.log(dadosProduto); // teste do passo 3 e 4
         // Passo 5 - slide -> enviar os dados do produto para o renderizador (JSON.stringify converte para JSON)
         // Melhoria na experiência do usuário (se não existir o produto cadastrado, enviar mensagem e questionar se o usário deseja cadastrar um novo produto)
         if (dadosProduto.length === 0) {
@@ -744,21 +843,22 @@ ipcMain.on('search-product', async (event, proNome) => {
                 message: 'Produto não cadastrado.\nDeseja cadastrar este produto?',
                 buttons: ['Sim', 'Não']
             }).then((result) => {
-                console.log(result)
+                console.log(result);
                 if (result.response === 0) {
                     // Enviar ao renderizador um pedido para setar o nome do produto (trazendo do campo de busca) e liberar o botão adicionar
-                    event.reply('set-nameProduct')
+                    event.reply('set-nameProduct', proNome); // Envia o nome do produto para o renderizador
                 } else {
                     // Enviar ao renderizador um pedido para limpar os campos do formulário
-                    event.reply('reset-form')
+                    event.reply('reset-form');
                 }
-            })
+            });
+        } else {
+            event.reply('data-product', JSON.stringify(dadosProduto));
         }
-        event.reply('data-product', JSON.stringify(dadosProduto))
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-})
+});
 // Fim CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // CRUD Delete - Nome produto <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -794,30 +894,49 @@ ipcMain.on('delete-product', async (event, idProduto) => {
 // Fim do CRUD delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
-
 //***************************BARCODE********************************/
 //**************************************************************** */
 //>>>>>>>>>>>>>>>>>BARCODE - DELETE - UPDATE>>>>>>>>>>>>>>>>>>>>>>>*/
 
 // CRUD Read Barcode >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ipcMain.on('search-barcode', async (event, barCode) => {
-    // teste de recebimento do nome do produto a ser pesquisado (passo 2)
-    console.log(barCode)
-    // Passo 3 e 4 - Pesquisar no banco de dados o produto pelo nome
+    // teste de recebimento do código de barras a ser pesquisado (passo 2)
+    console.log(barCode);
+    // Passo 3 e 4 - Pesquisar no banco de dados o produto pelo código de barras
     // find() -> buscar no banco de dados (mongoose)
-    // RegExp -> filtro pelo nome do produto, 'i' insensitive ( maiúsculo ou minúsculo)
-    // ATENÇÃO: nomeProduto -> model | proNome -> renderizador
+    // RegExp -> filtro pelo código de barras, 'i' insensitive ( maiúsculo ou minúsculo)
+    // ATENÇÃO: barcodeProduto -> model | barCode -> renderizador
     try {
         const dadosBarcode = await produtoModel.find({
             barcodeProduto: new RegExp(barCode, 'i')
-        })
-        console.log(dadosBarcode) // teste do passo 3 e 4
+        });
+        console.log(dadosBarcode); // teste do passo 3 e 4
         // Passo 5 - slide -> enviar os dados do produto para o renderizador (JSON.stringify converte para JSON)
-        event.reply('data-barcode', JSON.stringify(dadosBarcode))
+        // Melhoria na experiência do usuário (se não existir o produto cadastrado, enviar mensagem e questionar se o usário deseja cadastrar um novo produto)
+        if (dadosBarcode.length === 0) {
+            dialog.showMessageBox({
+                type: 'warning',
+                title: 'Barcode',
+                message: 'Barcode não cadastrado.\nDeseja cadastrar este barcode?',
+                buttons: ['Sim', 'Não']
+            }).then((result) => {
+                console.log(result);
+                if (result.response === 0) {
+                    // Enviar ao renderizador um pedido para setar o código de barras e liberar o botão adicionar
+                    event.reply('set-barcode', barCode); // Envia o código de barras para o renderizador
+                } else {
+                    // Enviar ao renderizador um pedido para limpar os campos do formulário
+                    event.reply('reset-form');
+                }
+            });
+        } else {
+            event.reply('data-barcode', JSON.stringify(dadosBarcode));
+        }
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-})
+});
+
 // Fim CRUD Read Barcode <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 // CRUD Update BARCODE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
