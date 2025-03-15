@@ -7,12 +7,22 @@ const foco = document.getElementById('searchSupplier')
  
 //Mudar as propriedades do documento html ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
-    ///btnCreate.disabled = true
+    // Configurações iniciais
     btnUpdate.disabled = true
     btnDelete.disabled = true
     btnUrl.disabled = true
     foco.focus()
-})  
+})
+
+// Receber a mensagem de CNPJ inválido
+api.cnpjInvalido(() => {
+    document.getElementById('inputCnpjSupplier').classList.add('campo-invalido')
+})
+
+// Remover a borda vermelha ao digitar
+document.getElementById('inputCnpjSupplier').addEventListener('input', () => {
+    document.getElementById('inputCnpjSupplier').classList.remove('campo-invalido')
+})
  
 // Função para manipular o evento da tecla Enter
 function teclaEnter(event) {
@@ -300,8 +310,7 @@ function acessarSite() {
     api.abrirSite({ url: urlFornecedor })
 }
 
- 
- 
+
 // Reset Form >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 api.resetarFormulario((args) => {
     resetForm()

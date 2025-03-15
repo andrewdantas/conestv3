@@ -8,11 +8,21 @@ const focoBarcode = document.getElementById('searchBarcode'); // Campo de busca 
  
 // Mudar as propriedades do documento HTML ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
+    // Configurações iniciais
     btnUpdate.disabled = true;
     btnDelete.disabled = true;
-    //btnCreate.disabled = true; // Desabilita o botão de adicionar inicialmente
     focoBarcode.focus(); // Foco inicial no campo de barcode
 });
+
+// Receber a mensagem de barcode inválido
+api.barcodeInvalido(() => {
+    document.getElementById('inputBarcodeProduct').classList.add('campo-invalido')
+})
+
+// Remover a borda vermelha ao digitar
+document.getElementById('inputBarcodeProduct').addEventListener('input', () => {
+    document.getElementById('inputBarcodeProduct').classList.remove('campo-invalido')
+})
  
 // Manipulação do evento Enter para buscar por nome ou barcode
 function teclaEnter(event) {

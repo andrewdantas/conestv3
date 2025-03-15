@@ -11,7 +11,9 @@ const produtosSchema = new Schema ({
         type: String
     },
     barcodeProduto: {
-        type: String
+        type: String,
+        unique: true,
+        index: true
     },
     precoProduto: {
         type: String

@@ -237,7 +237,9 @@ app.whenReady().then(() => {
         // a linha abaixo estabelece a conexão com o banco
         dbcon = await dbConnect()
         // enviar ao renderizador uma mensagem para trocar o ícone do status do banco de dados
-        event.reply('db-message', "conectado")
+        setTimeout(() => {
+            event.reply('db-message', "conectado")
+        }, 500)
     })
 
     // desconectar do banco de dados ao encerrar a aplicação
@@ -370,9 +372,22 @@ ipcMain.on('new-client', async (event, cliente) => {
         event.reply('reset-form')
 
     } catch (error) {
-        console.log(error)
+        if (error.code === 11000) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "CPF já cadastrado\nVerifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                // Quando o usuário clicar em "OK", enviar uma mensagem ao renderizador para destacar o campo de CPF
+                if (result.response === 0) { // 0 é o índice do botão "OK"
+                    event.reply('cpf-invalido') // Envia uma mensagem ao renderizador
+                }
+            })
+        } else {
+            console.log(error)
+        }
     }
-
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -450,19 +465,32 @@ ipcMain.on('update-client', async (event, cliente) => {
                 new: true
             }
         )
+        dialog.showMessageBox(client, {
+            type: 'info',
+            message: 'Dados do cliente alterados com sucesso.',
+            buttons: ['OK']
+        }).then((result) => {
+            if (result.response === 0) {
+                event.reply('reset-form')
+            }
 
+        })
     } catch (error) {
-        console.log(error)
-    }
-    dialog.showMessageBox(client, {
-        type: 'info',
-        message: 'Dados do cliente alterados com sucesso.',
-        buttons: ['OK']
-    }).then((result) => {
-        if (result.response === 0) {
-            event.reply('reset-form')
+        if (error.code === 11000) { // Erro de duplicação no MongoDB
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "CPF já cadastrado. Verifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                if (result.response === 0) { // Se o usuário clicar em "OK"
+                    event.reply('cpf-invalido'); // Envia mensagem ao frontend
+                }
+            });
+        } else {
+            console.log(error); // Outros erros
         }
-    })
+    }
 })
 // Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -547,7 +575,21 @@ ipcMain.on('new-supplier', async (event, fornecedor) => {
         event.reply('reset-form')
 
     } catch (error) {
-        console.log(error)
+        if (error.code === 11000) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "CNPJ já cadastrado\nVerifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                // Quando o usuário clicar em "OK", enviar uma mensagem ao renderizador para destacar o campo de CNPJ
+                if (result.response === 0) { // 0 é o índice do botão "OK"
+                    event.reply('cnpj-invalido') // Envia uma mensagem ao renderizador
+                }
+            })
+        } else {
+            console.log(error)
+        }
     }
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -618,18 +660,31 @@ ipcMain.on('update-supplier', async (event, fornecedor) => {
             }
         )
 
+        dialog.showMessageBox(supplier, {
+            type: 'info',
+            message: 'Dados do fornecedor alterados com sucesso.',
+            buttons: ['OK']
+        }).then((result) => {
+            if (result.response === 0) {
+                event.reply('reset-form')
+            }
+        })
     } catch (error) {
-        console.log(error)
-    }
-    dialog.showMessageBox(supplier, {
-        type: 'info',
-        message: 'Dados do fornecedor alterados com sucesso.',
-        buttons: ['OK']
-    }).then((result) => {
-        if (result.response === 0) {
-            event.reply('reset-form')
+        if (error.code === 11000) { // Erro de duplicação no MongoDB
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "CNPJ já cadastrado. Verifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                if (result.response === 0) { // Se o usuário clicar em "OK"
+                    event.reply('cnpj-invalido'); // Envia mensagem ao frontend
+                }
+            });
+        } else {
+            console.log(error); // Outros erros
         }
-    })
+    }
 })
 // Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -700,7 +755,7 @@ ipcMain.on('new-product', async (event, produto) => {
     // Teste de recebimento dos dados (Passo 2 - slide) Importante!
     console.log(produto)
 
-    //resoluão de BUG (quando a imagem não for selecionada)
+    //resolusão de BUG (quando a imagem não for selecionada)
     let caminhoImagemSalvo = ""
 
     try {
@@ -752,7 +807,21 @@ ipcMain.on('new-product', async (event, produto) => {
 
 
     } catch (error) {
-        console.log(error)
+        if (error.code === 11000) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "Barcode já cadastrado\nVerifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                // Quando o usuário clicar em "OK", enviar uma mensagem ao renderizador para destacar o campo de barcode
+                if (result.response === 0) { // 0 é o índice do botão "OK"
+                    event.reply('barcode-invalido') // Envia uma mensagem ao renderizador
+                }
+            })
+        } else {
+            console.log(error)
+        }
     }
 
     /*
@@ -787,6 +856,8 @@ ipcMain.on('new-product', async (event, produto) => {
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+
 //BARCODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Recebimento dos dados do formulário do produto
@@ -800,7 +871,8 @@ ipcMain.on('new-barcode', async (event, produto) => {
         const novoBarcode = new produtoModel({
             nomeProduto: produto.nomePro,
             barcodeProduto: produto.barcodePro,
-            precoProduto: produto.precoPro
+            precoProduto: produto.precoPro,
+            caminhoImagemProduto: produto.caminhoImagemPro
         })
         // A linha abaixo usa a biblioteca moongoose para salvar
         await novoBarcode.save()
@@ -816,7 +888,21 @@ ipcMain.on('new-barcode', async (event, produto) => {
         event.reply('reset-form')
 
     } catch (error) {
-        console.log(error)
+        if (error.code === 11000) {
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "Barcode já cadastrado\nVerifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                // Quando o usuário clicar em "OK", enviar uma mensagem ao renderizador para destacar o campo de barcode
+                if (result.response === 0) { // 0 é o índice do botão "OK"
+                    event.reply('barcode-invalido') // Envia uma mensagem ao renderizador
+                }
+            })
+        } else {
+            console.log(error)
+        }
     }
 })
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -941,32 +1027,58 @@ ipcMain.on('search-barcode', async (event, barCode) => {
 
 // CRUD Update BARCODE>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ipcMain.on('update-product', async (event, produto) => {
-    // teste de recebimento dos dados do produto ( passo 2 )
-    console.log(produto)
-    try {
-        const produtoEditado = await produtoModel.findByIdAndUpdate(
-            produto.idPro, {
-            nomeProduto: produto.nomePro,
-            barcodeProduto: produto.barcodePro,
-            precoProduto: produto.precoPro
-        },
-            {
-                new: true
-            }
-        )
+    console.log(produto); // Verifique os dados recebidos
 
-    } catch (error) {
-        console.log(error)
-    }
-    dialog.showMessageBox(products, {
-        type: 'info',
-        message: 'Dados do produto alterados com sucesso.',
-        buttons: ['OK']
-    }).then((result) => {
-        if (result.response === 0) {
-            event.reply('reset-form')
+    try {
+        if (produto.caminhoImagemPro === "") {
+            // Atualiza o produto sem alterar o caminho da imagem
+            const produtoEditado = await produtoModel.findByIdAndUpdate(
+                produto.idPro, {
+                    nomeProduto: produto.nomePro,
+                    barcodeProduto: produto.barcodePro,
+                    precoProduto: produto.precoPro,
+                },
+                { new: true }
+            )
+        } else {
+            // Atualiza o produto com o novo caminho da imagem
+            const produtoEditado = await produtoModel.findByIdAndUpdate(
+                produto.idPro, {
+                    nomeProduto: produto.nomePro,
+                    barcodeProduto: produto.barcodePro,
+                    precoProduto: produto.precoPro,
+                    caminhoImagemProduto: produto.caminhoImagemPro
+                },
+                { new: true }
+            )
         }
-    })
+
+        // Confirmação de sucesso
+        dialog.showMessageBox(products, {
+            type: 'info',
+            message: 'Dados do produto alterados com sucesso.',
+            buttons: ['OK']
+        }).then((result) => {
+            if (result.response === 0) {
+                event.reply('reset-form'); // Reseta o formulário no frontend
+            }
+        })
+    } catch (error) {
+        if (error.code === 11000) { // Erro de duplicação no MongoDB
+            dialog.showMessageBox({
+                type: 'error',
+                title: 'Atenção!',
+                message: "Barcode já cadastrado. Verifique se digitou corretamente.",
+                buttons: ['OK']
+            }).then((result) => {
+                if (result.response === 0) { // Se o usuário clicar em "OK"
+                    event.reply('barcode-invalido'); // Envia mensagem ao frontend
+                }
+            })
+        } else {
+            console.log(error); // Outros erros
+        }
+    }
 })
 // Fim do CRUD Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

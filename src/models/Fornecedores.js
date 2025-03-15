@@ -35,7 +35,9 @@ const fornecedoresSchema = new Schema ({
         type: String
     },
     cpnjFornecedor: {
-        type: String
+        type: String,
+        unique: true,
+        index: true
     },
     complementoFornecedor: {
         type: String

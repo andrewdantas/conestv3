@@ -1,12 +1,12 @@
 /**
  * Segurança e Desempenho
  */
- 
-const { contextBridge, ipcRenderer} = require('electron')
- 
+
+const { contextBridge, ipcRenderer } = require('electron')
+
 // Estabelecer a conexão com o banco (pedido para o main abrir a conexão com o banco de dados)
 ipcRenderer.send('db-connect')
- 
+
 contextBridge.exposeInMainWorld('api', {
     dbMensagem: (message) => ipcRenderer.on('db-message', message),
     fecharJanela: () => ipcRenderer.send('close-about'),
@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld('api', {
     janelaProdutos: () => ipcRenderer.send('open-products'),
     janelaRelatorios: () => ipcRenderer.send('open-reports'),
     resetarFormulario: (args) => ipcRenderer.on('reset-form', args),
-    
+
     novoCliente: (cliente) => ipcRenderer.send('new-client', cliente),
     buscarCliente: (cliNome) => ipcRenderer.send('search-client', cliNome),
     renderizarCliente: (dadosCliente) => ipcRenderer.on('data-client', dadosCliente),
@@ -40,10 +40,18 @@ contextBridge.exposeInMainWorld('api', {
     setarNomeCliente: (args) => ipcRenderer.on('set-nameClient', args),
     setarNomeFornecedor: (args) => ipcRenderer.on('set-nameSupplier', args),
     setarNomeProduto: (args) => ipcRenderer.on('set-nameProduct', args),
-    setarBarcode: (args) => ipcRenderer.on('set-barcode', args), 
+    setarBarcode: (args) => ipcRenderer.on('set-barcode', args),
     deletarBarcode: (idProduto) => ipcRenderer.send('delete-barcode', idProduto),
     editarBarcode: (produto) => ipcRenderer.send('update-barcode', produto),
     abrirSite: (site) => ipcRenderer.send('url-site', site),
 
-    selecionarArquivo: () => ipcRenderer.invoke('open-file-dialog')
+    selecionarArquivo: () => ipcRenderer.invoke('open-file-dialog'),
+
+
+    cnpjInvalido: (callback) => ipcRenderer.on('cnpj-invalido', callback),
+
+    cpfInvalido: (callback) => ipcRenderer.on('cpf-invalido', callback),
+
+    barcodeInvalido: (callback) => ipcRenderer.on('barcode-invalido', callback)
+
 })

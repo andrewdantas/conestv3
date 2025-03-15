@@ -38,7 +38,9 @@ const clienteSchema = new Schema ({
         type: String
     },
     cpfCliente: {
-        type: String
+        type: String,
+        unique: true,
+        index: true
     },
     complementoCliente: {
         type: String

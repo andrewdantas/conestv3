@@ -7,14 +7,24 @@ const foco = document.getElementById('searchClient')
  
 //Mudar as propriedades do documento html ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
-    //btnCreate.disabled = true
+    // Configurações iniciais
     btnUpdate.disabled = true
     btnDelete.disabled = true
     foco.focus()
-    //Desativar o input das caixas de texto dentro da Div .bloqueio
+    // Desativar o input das caixas de texto dentro da Div .bloqueio
     document.querySelectorAll('.bloqueio input').forEach(input => {
         input.disabled = true
     })
+})
+
+// Receber a mensagem de CPF inválido
+api.cpfInvalido(() => {
+    document.getElementById('inputCpfClient').classList.add('campo-invalido')
+})
+
+// Remover a borda vermelha ao digitar
+document.getElementById('inputCpfClient').addEventListener('input', () => {
+    document.getElementById('inputCpfClient').classList.remove('campo-invalido')
 })
  
 // Função para manipular o evento da tecla Enter
