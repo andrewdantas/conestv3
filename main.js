@@ -338,12 +338,8 @@ const template = [
 // CRUD Create >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // Recebimento dos dados do formulário do cliente
 ipcMain.on('new-client', async (event, cliente) => {
-    // Teste de recebimento dos dados (Passo 2 - slide) Importante!
-    console.log(cliente)
-
-    // Passo 3 - slide (cadastrar os dados do banco de dados)
     try {
-        // Criar um novo objeto usando a classe modelo
+        // Lógica para criar cliente
         const novoCliente = new clienteModel({
             nomeCliente: cliente.nomeCli,
             dddCliente: cliente.dddCli,
@@ -357,38 +353,33 @@ ipcMain.on('new-client', async (event, cliente) => {
             telefoneCliente: cliente.telefoneCli,
             cpfCliente: cliente.cpfCli,
             complementoCliente: cliente.complementoCli
-        })
-        // A linha abaixo usa a biblioteca moongoose para salvar
-        await novoCliente.save()
+        });
+        await novoCliente.save();
 
-        // Confirmação  de cliente  adicionado no banco
+        // Confirmação de sucesso
         dialog.showMessageBox({
             type: 'info',
             title: 'Aviso',
             message: "Cliente Adicionado com Sucesso",
             buttons: ['OK']
-        })
-        // Enviar uma resposta para o renderizador resetar o formulário
-        event.reply('reset-form')
-
+        });
+        event.reply('reset-form');
     } catch (error) {
-        if (error.code === 11000) {
+        if (error.code === 11000) { // Erro de duplicação no MongoDB
             dialog.showMessageBox({
                 type: 'error',
                 title: 'Atenção!',
                 message: "CPF já cadastrado\nVerifique se digitou corretamente.",
                 buttons: ['OK']
-            }).then((result) => {
-                // Quando o usuário clicar em "OK", enviar uma mensagem ao renderizador para destacar o campo de CPF
-                if (result.response === 0) { // 0 é o índice do botão "OK"
-                    event.reply('cpf-invalido') // Envia uma mensagem ao renderizador
-                }
-            })
+            }).then(() => {
+                // Enviar uma mensagem ao renderizador para focar no campo de CPF
+                event.reply('cpf-invalido');
+            });
         } else {
-            console.log(error)
+            console.log(error);
         }
     }
-})
+});
 // Fim CRUD Create <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
@@ -996,7 +987,7 @@ ipcMain.on('search-barcode', async (event, barCode) => {
         const dadosBarcode = await produtoModel.find({
             barcodeProduto: new RegExp(barCode, 'i')
         });
-        console.log(dadosBarcode); // teste do passo 3 e 4
+        console.log(dadosBarcode) // teste do passo 3 e 4
         // Passo 5 - slide -> enviar os dados do produto para o renderizador (JSON.stringify converte para JSON)
         // Melhoria na experiência do usuário (se não existir o produto cadastrado, enviar mensagem e questionar se o usário deseja cadastrar um novo produto)
         if (dadosBarcode.length === 0) {
@@ -1006,7 +997,7 @@ ipcMain.on('search-barcode', async (event, barCode) => {
                 message: 'Barcode não cadastrado.\nDeseja cadastrar este barcode?',
                 buttons: ['Sim', 'Não']
             }).then((result) => {
-                console.log(result);
+                console.log(result)
                 if (result.response === 0) {
                     // Enviar ao renderizador um pedido para setar o código de barras e liberar o botão adicionar
                     event.reply('set-barcode', barCode); // Envia o código de barras para o renderizador
@@ -1019,7 +1010,7 @@ ipcMain.on('search-barcode', async (event, barCode) => {
             event.reply('data-barcode', JSON.stringify(dadosBarcode));
         }
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 });
 

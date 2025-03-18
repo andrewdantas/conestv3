@@ -5,7 +5,7 @@
  
 const foco = document.getElementById('searchSupplier')
  
-//Mudar as propriedades do documento html ao iniciar a janela
+// Mudar as propriedades do documento html ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
     // Configurações iniciais
     btnUpdate.disabled = true
@@ -16,7 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Receber a mensagem de CNPJ inválido
 api.cnpjInvalido(() => {
-    document.getElementById('inputCnpjSupplier').classList.add('campo-invalido')
+    const inputCnpj = document.getElementById('inputCnpjSupplier')
+    inputCnpj.classList.add('campo-invalido') // Adiciona a classe para estilizar o foco
+    inputCnpj.focus() // Coloca o foco no campo de CNPJ
+})
+
+// Manter o foco vermelho enquanto o campo estiver em foco
+document.getElementById('inputCnpjSupplier').addEventListener('focus', () => {
+    const inputCnpj = document.getElementById('inputCnpjSupplier')
+    if (inputCnpj.classList.contains('campo-invalido')) {
+        inputCnpj.classList.add('campo-invalido-foco') // Adiciona uma classe adicional para manter o foco vermelho
+    }
+})
+
+document.getElementById('inputCnpjSupplier').addEventListener('blur', () => {
+    const inputCnpj = document.getElementById('inputCnpjSupplier')
+    inputCnpj.classList.remove('campo-invalido-foco') // Remove a classe adicional ao perder o foco
 })
 
 // Remover a borda vermelha ao digitar
@@ -37,13 +52,13 @@ function restaurarEnter() {
     document.getElementById('frmSupplier').removeEventListener('keydown', teclaEnter)
 }
  
-// manipulando o evento (tecla Enter)
+// Manipulando o evento (tecla Enter)
 document.getElementById('frmSupplier').addEventListener('keydown', teclaEnter)
  
 // Array usado nos métodos para manipulação da estrutura de dados
 let arrayFornecedor = []
  
-// Passo 1 - slide (capturar os dados dos inputs do form)
+// Passo 1 - Capturar os dados dos inputs do form
 let formFornecedor = document.getElementById('frmSupplier')
 let idFornecedor = document.getElementById('inputIdSupplier')
 let nomeFornecedor = document.getElementById('inputNameSupplier')
@@ -67,7 +82,7 @@ formFornecedor.addEventListener('submit', async (event) => {
     // Teste importante! (fluxo dos dados)
     // console.log(nomeFornecedor.value, dddForncedor.value, emailFornecedor.value)
  
-    // Passo 2 - slide (envio das informações para o main)
+    // Passo 2 - Envio das informações para o main
     // Estratégia para determinar se é um novo cadastro de fornecedor ou a edição de um fornecedor já existente
     if (idFornecedor.value === "") {
         // Criar um objeto
@@ -107,32 +122,24 @@ formFornecedor.addEventListener('submit', async (event) => {
     }
 })
  
- 
 // Fim do CRUD Create/Update <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  
 // CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function buscarFornecedor() {
-    // Passo 1 (slide)
+    // Passo 1
     let forNome = document.getElementById('searchSupplier').value
-    //validação
+    // Validação
     if (forNome === "") {
-        api.validarBusca() //validação do campo obrigatório
+        api.validarBusca() // Validação do campo obrigatório
         foco.focus()
     } else {
-        //console.log(forNome) // teste do passo 1
-        console.log(forNome)
-        // Passo 2 (slide) - Enviar o pedido de busca do fornecedor ao main
+        // Passo 2 - Enviar o pedido de busca do fornecedor ao main
         api.buscarFornecedor(forNome)
         // Passo 5 - Recebimento dos dados do fornecedor
         api.renderizarFornecedor((event, dadosFornecedor) => {
-            // teste de recebimento dos dados do fornecedor
-            console.log(dadosFornecedor)
-            // Passo 6 (slide) - Renderização dos dados dos fornecedor no formulário
             const fornecedorRenderizado = JSON.parse(dadosFornecedor)
             arrayFornecedor = fornecedorRenderizado
-            // teste para entendimento da lógica
-            console.log(arrayFornecedor)
-            // percorrer o array de fornecedor, extrair os dados e setar (preencher) os campos do formulário
+            // Percorrer o array de fornecedor, extrair os dados e setar (preencher) os campos do formulário
             arrayFornecedor.forEach((c) => {
                 document.getElementById('inputNameSupplier').value = c.nomeFornecedor
                 document.getElementById('inputdddSupplier').value = c.dddFornecedor
@@ -147,40 +154,38 @@ function buscarFornecedor() {
                 document.getElementById('inputCnpjSupplier').value = c.cpnjFornecedor
                 document.getElementById('inputComplementoSupplier').value = c.complementoFornecedor
                 document.getElementById('inputPhoneSupplier').value = c.telefoneFornecedor
-                //limpar o campo de busca e remover o foco
+                // Limpar o campo de busca e remover o foco
                 foco.value = ""
  
                 foco.disabled = true
                 btnRead.disabled = true
                 btnCreate.disabled = true
  
-                //foco.blur()
-                //liberar os botões editar e excluir
+                // Liberar os botões editar e excluir
                 document.getElementById('btnUpdate').disabled = false
                 document.getElementById('btnDelete').disabled = false
                 document.getElementById('btnUrl').disabled = false
-                //restaurar o padrão da tecla Enter
+                // Restaurar o padrão da tecla Enter
                 restaurarEnter()
             })
         })
     }
-    //setar o nome do fornecedor e liberar o botão adicionar
+    // Setar o nome do fornecedor e liberar o botão adicionar
     api.setarNomeFornecedor(() => {
-        //setar o nome do fornecedor      
+        // Setar o nome do fornecedor      
         let campoNome = document.getElementById('searchSupplier').value
         document.getElementById('inputNameSupplier').focus()
         document.getElementById('inputNameSupplier').value = campoNome
-        //limpar o campo de busca e remover o foco
+        // Limpar o campo de busca e remover o foco
         foco.value = ""
         foco.blur()
-        //liberar o botão adicionar
+        // Liberar o botão adicionar
         btnCreate.disabled = false
-        //restaurar o padrão da tecla Enter
+        // Restaurar o padrão da tecla Enter
         restaurarEnter()
     })
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
- 
  
 // CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function excluirFornecedor() {
@@ -207,7 +212,6 @@ cepFornecedor.addEventListener('blur', async () => {
             }
         } catch (error) {
             console.log("Erro ao buscar CEP:", error)
-            //alert("Erro ao buscar o CEP.")
         }
     }
 })
@@ -250,7 +254,6 @@ const dddMapping = {
     "PR": 41, // Paraná
     "RS": 51, // Rio Grande do Sul
     "SC": 48, // Santa Catarina
- 
 }
  
 // Função para buscar o DDD com base na UF ou Cidade
@@ -309,7 +312,6 @@ function acessarSite() {
     // Se a URL for válida, abrir no navegador
     api.abrirSite({ url: urlFornecedor })
 }
-
 
 // Reset Form >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 api.resetarFormulario((args) => {

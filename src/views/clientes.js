@@ -5,7 +5,7 @@
  
 const foco = document.getElementById('searchClient')
  
-//Mudar as propriedades do documento html ao iniciar a janela
+// Mudar as propriedades do documento html ao iniciar a janela
 document.addEventListener('DOMContentLoaded', () => {
     // Configurações iniciais
     btnUpdate.disabled = true
@@ -19,7 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Receber a mensagem de CPF inválido
 api.cpfInvalido(() => {
-    document.getElementById('inputCpfClient').classList.add('campo-invalido')
+    const inputCpf = document.getElementById('inputCpfClient')
+    inputCpf.classList.add('campo-invalido') // Adiciona a classe para estilizar o foco
+    inputCpf.focus() // Coloca o foco no campo de CPF
+})
+
+// Manter o foco vermelho enquanto o campo estiver em foco
+document.getElementById('inputCpfClient').addEventListener('focus', () => {
+    const inputCpf = document.getElementById('inputCpfClient')
+    if (inputCpf.classList.contains('campo-invalido')) {
+        inputCpf.classList.add('campo-invalido-foco') // Adiciona uma classe adicional para manter o foco vermelho
+    }
+})
+
+document.getElementById('inputCpfClient').addEventListener('blur', () => {
+    const inputCpf = document.getElementById('inputCpfClient')
+    inputCpf.classList.remove('campo-invalido-foco') // Remove a classe adicional ao perder o foco
 })
 
 // Remover a borda vermelha ao digitar
@@ -40,13 +55,13 @@ function restaurarEnter() {
     document.getElementById('frmClient').removeEventListener('keydown', teclaEnter)
 }
  
-// manipulando o evento (tecla Enter)
+// Manipulando o evento (tecla Enter)
 document.getElementById('frmClient').addEventListener('keydown', teclaEnter)
  
 // Array usado nos métodos para manipulação da estrutura de dados
 let arrayCliente = []
  
-// Passo 1 - slide (capturar os dados dos inputs do form)
+// Passo 1 - Capturar os dados dos inputs do form
 let formCliente = document.getElementById('frmClient')
 let idCliente = document.getElementById('inputIdClient')
 let nomeCliente = document.getElementById('inputNameClient')
@@ -67,10 +82,10 @@ let complementoCliente = document.getElementById('inputComplementoClient')
 formCliente.addEventListener('submit', async (event) => {
     // Evitar o comportamento padrão de envio em um form
     event.preventDefault()
-        // Teste importante! (fluxo dos dados)
-        / console.log(idCliente.value, nomeCliente.value, dddCliente.value, emailCliente.value)
+    // Teste importante! (fluxo dos dados)
+    // console.log(idCliente.value, nomeCliente.value, dddCliente.value, emailCliente.value)
  
-    // Passo 2 - slide (envio das informações para o main)
+    // Passo 2 - Envio das informações para o main
     // Estratégia para determinar se é um novo cadastro de cliente ou a edição de um cliente já existente
     if (idCliente.value === "") {
         // Criar um objeto
@@ -113,26 +128,20 @@ formCliente.addEventListener('submit', async (event) => {
  
 // CRUD Read >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function buscarCliente() {
-    // Passo 1 (slide)
+    // Passo 1
     let cliNome = document.getElementById('searchClient').value
-    //validação
+    // Validação
     if (cliNome === "") {
-        api.validarBusca() //validação do campo obrigatório
+        api.validarBusca() // Validação do campo obrigatório
         foco.focus()
     } else {
-        //console.log(cliNome) // teste do passo 1
-        // Passo 2 (slide) - Enviar o pedido de busca do cliente ao main
+        // Passo 2 - Enviar o pedido de busca do cliente ao main
         api.buscarCliente(cliNome)
         // Passo 5 - Recebimento dos dados do cliente
         api.renderizarCliente((event, dadosCliente) => {
-            // teste de recebimento dos dados do cliente
-            console.log(dadosCliente)
-            // Passo 6 (slide) - Renderização dos dados dos cliente no formulário
             const clienteRenderizado = JSON.parse(dadosCliente)
             arrayCliente = clienteRenderizado
-            // teste para entendimento da lógica
-            console.log(arrayCliente)
-            // percorrer o array de clientes, extrair os dados e setar (preencher) os campos do formulário
+            // Percorrer o array de clientes, extrair os dados e setar (preencher) os campos do formulário
             arrayCliente.forEach((c) => {
                 document.getElementById('inputIdClient').value = c._id
                 document.getElementById('inputNameClient').value = c.nomeCliente
@@ -148,36 +157,35 @@ function buscarCliente() {
                 document.getElementById('inputCpfClient').value = c.cpfCliente
                 document.getElementById('inputComplementoClient').value = c.complementoCliente
  
-                //limpar o campo de busca e remover o foco
+                // Limpar o campo de busca e remover o foco
                 foco.value = ""
  
                 foco.disabled = true
                 btnRead.disabled = true
                 btnCreate.disabled = true
  
-                //foco.blur()
-                //liberar os botões editar e excluir
+                // Liberar os botões editar e excluir
                 document.getElementById('btnUpdate').disabled = false
                 document.getElementById('btnDelete').disabled = false
-                //restaurar o padrão da tecla Enter
+                // Restaurar o padrão da tecla Enter
                 restaurarEnter()
             })
         })
     }
-    //setar o nome do cliente e liberar o botão adicionar
+    // Setar o nome do cliente e liberar o botão adicionar
     api.setarNomeCliente(() => {
-        //setar o nome do cliente      
+        // Setar o nome do cliente      
         let campoNome = document.getElementById('searchClient').value
         document.getElementById('inputNameClient').focus()
         document.getElementById('inputNameClient').value = campoNome
-        //limpar o campo de busca e remover o foco
+        // Limpar o campo de busca e remover o foco
         foco.value = ""
         foco.blur()
-        //liberar o botão adicionar
+        // Liberar o botão adicionar
         btnCreate.disabled = false
-        //restaurar o padrão da tecla Enter
+        // Restaurar o padrão da tecla Enter
         restaurarEnter()
-        //Reativar o input das caixas de texto
+        // Reativar o input das caixas de texto
         document.querySelectorAll('.bloqueio input').forEach(input => {
             input.disabled = false
         })
@@ -185,14 +193,11 @@ function buscarCliente() {
 }
 // Fim do CRUD Read <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
  
- 
 // CRUD Delete >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 function excluirCliente() {
     api.deletarCliente(idCliente.value) // Passo 1 do slide
 }
 // Fim do CRUD Delete <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
- 
- 
  
 // Função para preencher os dados de endereço automaticamente
 cepCliente.addEventListener('blur', async () => {
@@ -251,7 +256,6 @@ const dddMapping = {
     "PR": 41, // Paraná
     "RS": 51, // Rio Grande do Sul
     "SC": 48, // Santa Catarina
- 
 }
  
 // Função para buscar o DDD com base na UF ou Cidade
@@ -291,7 +295,6 @@ cepCliente.addEventListener('blur', async () => {
     }
 })
  
- 
 // Reset Form >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 api.resetarFormulario((args) => {
     resetForm()
@@ -304,64 +307,65 @@ function resetForm() {
 // Fim - Reset Form <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 function validarCpf(cpf) {
-    cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+    cpf = cpf.replace(/\D/g, '') // Remove caracteres não numéricos
 
     if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-        return false; // CPF inválido
+        return false // CPF inválido
     }
 
-    let soma = 0, peso = 10;
+    let soma = 0
+    let peso = 10
 
     // Primeiro dígito verificador
     for (let i = 0; i < 9; i++) {
-        soma += parseInt(cpf.charAt(i)) * peso--;
+        soma += parseInt(cpf.charAt(i)) * peso--
     }
-    let digito1 = 11 - (soma % 11);
-    if (digito1 >= 10) digito1 = 0;
-    if (parseInt(cpf.charAt(9)) !== digito1) return false;
+    let digito1 = 11 - (soma % 11)
+    if (digito1 >= 10) digito1 = 0
+    if (parseInt(cpf.charAt(9)) !== digito1) return false
 
     // Segundo dígito verificador
-    soma = 0;
-    peso = 11;
+    soma = 0
+    peso = 11
     for (let i = 0; i < 10; i++) {
-        soma += parseInt(cpf.charAt(i)) * peso--;
+        soma += parseInt(cpf.charAt(i)) * peso--
     }
-    let digito2 = 11 - (soma % 11);
-    if (digito2 >= 10) digito2 = 0;
-    if (parseInt(cpf.charAt(10)) !== digito2) return false;
+    let digito2 = 11 - (soma % 11)
+    if (digito2 >= 10) digito2 = 0
+    if (parseInt(cpf.charAt(10)) !== digito2) return false
 
-    return true;
+    return true
 }
 
 async function validarExistenciaCpf(cpf) {
-    const inputCpf = document.getElementById('inputCpfClient');
+    const inputCpf = document.getElementById('inputCpfClient')
 
     if (!validarCpf(cpf)) {
-        inputCpf.value = '';
-        inputCpf.placeholder = 'CPF inválido!';
-        return;
+        inputCpf.value = ''
+        inputCpf.placeholder = 'CPF inválido!'
+        return
     }
 
     try {
-        const response = await fetch(`https://api.validador-cpf.com/${cpf}`); // API fictícia, substitua por uma real
-        const data = await response.json();
+        const response = await fetch(`https://api.validador-cpf.com/${cpf}`) // API fictícia, substitua por uma real
+        const data = await response.json()
 
         if (data.exists) {
         } else {
-            inputCpf.placeholder = 'CPF não encontrado!';
+            inputCpf.placeholder = 'CPF não encontrado!'
         }
     } catch (error) {
-        inputCpf.placeholder = 'Erro ao validar CPF';
-        console.error('Erro ao validar CPF:', error);
+        inputCpf.placeholder = 'Erro ao validar CPF'
+        console.error('Erro ao validar CPF:', error)
     }
 }
 
 document.getElementById('inputCpfClient').addEventListener('blur', () => {
-    const cpf = document.getElementById('inputCpfClient').value;
-    validarExistenciaCpf(cpf);
-});
+    const cpf = document.getElementById('inputCpfClient').value
+    validarExistenciaCpf(cpf)
+})
 
 // Restaurar placeholder quando o usuário digitar novamente
 document.getElementById('inputCpfClient').addEventListener('input', function () {
-    this.placeholder = 'Digite seu CPF';
-});
+    this.placeholder = 'Digite seu CPF'
+})

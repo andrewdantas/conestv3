@@ -76,6 +76,11 @@ input[type=number]::-webkit-inner-spin-button {
     height: auto;
 }
 
-.campo-invalido {
-    border: 2px solid red !important; /* Destaca o campo com borda vermelha */
+.campo-invalido:focus {
+    outline: 2px solid red; /* Cor do foco vermelha */
+    outline-offset: 2px; /* Espaçamento opcional */
+}
+
+.campo-invalido-foco:focus {
+    outline: 2px solid red; /* Mantém o foco vermelho */
 }
